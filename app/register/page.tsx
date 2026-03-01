@@ -63,6 +63,11 @@ function getSocialIcon(platformName: string): LucideIcon {
   return Globe
 }
 
+function capitalizeWord(s: string): string {
+  if (!s) return s
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
+}
+
 // ── Progress bar ───────────────────────────────────────────────────────────
 
 const TOTAL_STEPS = 6
@@ -725,7 +730,7 @@ function StepSocialMedia({ onNext }: { onNext: () => void }) {
   }
 
   function addExtra() {
-    setExtras((prev) => [...prev, { id: `${Date.now()}-${Math.random()}`, platform: '', url: '' }])
+    setExtras((prev) => [...prev, { id: crypto.randomUUID(), platform: '', url: '' }])
   }
 
   function updateExtra(id: string, field: 'platform' | 'url', value: string) {
@@ -891,35 +896,42 @@ export default function RegisterPage() {
   // Map logical step to progress bar step (step 4A/4B/4C all count as step 4)
   const progressStep = Math.min(step, TOTAL_STEPS)
 
+  function advanceTo(s: number) {
+    setStep(s)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   function handleSignInEmail(em: string) {
     setEmail(em)
-    // Pre-fill name from email (part before @)
+    // Pre-fill name from email (part before @, split on dots/underscores/hyphens)
     const localPart = em.split('@')[0] ?? ''
-    if (!firstName) setFirstName(localPart)
-    setStep(2)
+    const nameParts = localPart.split(/[._-]/).filter(Boolean)
+    if (!firstName) setFirstName(capitalizeWord(nameParts[0] ?? localPart))
+    if (!lastName && nameParts.length > 1) setLastName(capitalizeWord(nameParts.slice(1).join(' ')))
+    advanceTo(2)
   }
 
   function handleName(first: string, last: string) {
     setFirstName(first)
     setLastName(last)
-    setStep(3)
+    advanceTo(3)
   }
 
   function handleRole(r: Role) {
     setRole(r)
-    setStep(4)
+    advanceTo(4)
   }
 
   function handleDetailsSubmit() {
     if (role === 'student') {
-      setStep(5)
+      advanceTo(5)
     } else {
-      setStep(6)
+      advanceTo(6)
     }
   }
 
   function handleSocialNext() {
-    setStep(6)
+    advanceTo(6)
   }
 
   const fullName = [firstName, lastName].filter(Boolean).join(' ')
