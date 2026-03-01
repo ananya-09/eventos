@@ -4,6 +4,7 @@ import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
 import LoaderWrapper from '@/components/loader-wrapper'
 import { ThemeProvider } from '@/components/theme-provider'
+import AuthSessionProvider from '@/components/session-provider'
 import './globals.css'
 
 const _outfit = Outfit({ subsets: ["latin"] });
@@ -41,11 +42,13 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans antialiased">
         <ThemeProvider>
-          <LoaderWrapper>
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
-          </LoaderWrapper>
+          <AuthSessionProvider>
+            <LoaderWrapper>
+              <Navbar />
+              <main>{children}</main>
+              <Footer />
+            </LoaderWrapper>
+          </AuthSessionProvider>
         </ThemeProvider>
       </body>
     </html>
