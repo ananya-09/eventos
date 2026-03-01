@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { FolderKanban, Star, GitFork, CircleDot } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -40,8 +41,8 @@ export default function Hero() {
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-2">Total Registrations</p>
               <p className="text-4xl md:text-5xl font-bold text-black dark:text-white mb-4">1,245</p>
-              <Button className="bg-blue-500 hover:bg-blue-600 text-white w-full">
-                Register Now
+              <Button asChild className="bg-blue-500 hover:bg-blue-600 text-white w-full">
+                <Link href="/register">Register Now</Link>
               </Button>
             </div>
 
