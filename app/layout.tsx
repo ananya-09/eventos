@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Manrope } from 'next/font/google'
 import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
 import LoaderWrapper from '@/components/loader-wrapper'
@@ -30,6 +31,11 @@ export const metadata: Metadata = {
   },
 }
 
+const fontSans = Manrope({
+  subsets: ['latin'],
+  display: 'swap',
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -37,7 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-sans antialiased">
+      <body className={`${fontSans.className} font-sans antialiased`}>
         <ThemeProvider>
           <AuthSessionProvider>
             <LoaderWrapper>
