@@ -1,14 +1,11 @@
 import type { Metadata } from 'next'
-import { Outfit, Inter } from 'next/font/google'
 import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
 import LoaderWrapper from '@/components/loader-wrapper'
 import { ThemeProvider } from '@/components/theme-provider'
 import AuthSessionProvider from '@/components/session-provider'
+import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
-
-const _outfit = Outfit({ subsets: ["latin"] });
-const _inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: 'EventHub - Modern Event Dashboard',
@@ -47,6 +44,7 @@ export default function RootLayout({
               <Navbar />
               <main>{children}</main>
               <Footer />
+              <Toaster richColors />
             </LoaderWrapper>
           </AuthSessionProvider>
         </ThemeProvider>
