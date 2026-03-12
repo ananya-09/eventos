@@ -2,33 +2,66 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
 
+const navItems = [
+  { href: '/', label: 'Home', type: 'route' as const },
+  { href: '#about', label: 'About', type: 'anchor' as const },
+  { href: '#contact', label: 'Contact', type: 'anchor' as const },
+  { href: '/pricing', label: 'Pricing', type: 'route' as const },
+]
+
 export default function Navbar() {
   const { data: session } = useSession()
+  const pathname = usePathname()
+
+  const isActive = (item: (typeof navItems)[number]) => {
+    if (item.type === 'anchor') {
+      return false
+    }
+    return pathname === item.href
+  }
 
   return (
     <nav className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border/50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0 font-bold text-xl text-foreground">
-            Eventos
-          </div>
+          {/* Logo + Nav group */}
+          <div className="flex items-center gap-8">
+            <div className="shrink-0 text-2xl font-semibold tracking-tight text-foreground">
+              Eventos
+            </div>
 
-          {/* Navigation Links */}
-          <div className="hidden md:flex items-center gap-8">
-            <Link href="#home" className="text-foreground hover:text-primary transition-colors">
-              Home
-            </Link>
-            <Link href="#about" className="text-foreground hover:text-primary transition-colors">
-              About
-            </Link>
-            <Link href="#contact" className="text-foreground hover:text-primary transition-colors">
-              Contact
-            </Link>
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center gap-4 lg:gap-6">
+              {navItems.map((item) => {
+                const active = isActive(item)
+                const baseClasses =
+                  'relative text-sm font-medium transition-colors duration-200 px-2 py-1'
+                const colorClasses = active
+                  ? 'text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`${baseClasses} ${colorClasses} group`}
+                  >
+                    <span>{item.label}</span>
+                    <span
+                      className="pointer-events-none absolute inset-x-1 -bottom-1 h-0.5 origin-left scale-x-0 bg-foreground/80 transition-transform duration-200 group-hover:scale-x-100 group-active:scale-x-100"
+                    />
+                    {active && (
+                      <span className="pointer-events-none absolute inset-x-1 -bottom-1 h-0.5 bg-foreground/80" />
+                    )}
+                  </Link>
+                )
+              })}
+            </div>
           </div>
 
           {/* Theme Toggle and Login Button */}

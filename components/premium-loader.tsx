@@ -12,29 +12,38 @@ export default function PremiumLoader({ onComplete }: PremiumLoaderProps) {
   const [isHiding, setIsHiding] = useState(false);
 
   useEffect(() => {
-    // Simulate loading progress with non-linear curve
-    const progressInterval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 99.5) {
-          clearInterval(progressInterval);
-          // Complete to 100% immediately
-          return 100;
-        }
-        
-        // Non-linear progress (faster at start, slower at end)
-        const increment = Math.random() * (8 - 1.5) + 1.5;
-        const newProgress = Math.min(prev + increment, 99.5);
-        return newProgress;
-      });
-    }, 150);
+    // Smooth progress using requestAnimationFrame with easing
+    const duration = 2600; // ms
+    const start = performance.now();
+    let frameId: number;
 
-    return () => clearInterval(progressInterval);
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+    const animate = (now: number) => {
+      const elapsed = now - start;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = easeOutCubic(t);
+      setProgress(Math.round(eased * 100));
+
+      if (t < 1) {
+        frameId = requestAnimationFrame(animate);
+      }
+    };
+
+    frameId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(frameId);
   }, []);
 
   useEffect(() => {
     if (progress === 100) {
       // Trigger completion callback immediately
       onComplete?.();
+
+      if (typeof window !== 'undefined') {
+        window.sessionStorage.setItem('loaderComplete', 'true');
+        window.dispatchEvent(new Event('loaderComplete'));
+      }
 
       // Start fade out after reaching 100%
       const fadeTimer = setTimeout(() => {
@@ -57,7 +66,7 @@ export default function PremiumLoader({ onComplete }: PremiumLoaderProps) {
 
   return (
     <div
-      className={`fixed inset-0 bg-black flex flex-col items-center justify-center z-[999] transition-opacity duration-500 ${
+      className={`fixed inset-0 bg-black flex flex-col items-center justify-center z-999 transition-opacity duration-500 ${
         isHiding ? 'opacity-0' : 'opacity-100'
       }`}
     >
@@ -65,7 +74,7 @@ export default function PremiumLoader({ onComplete }: PremiumLoaderProps) {
       <div className="mb-16 text-center">
         <h1 className="text-7xl md:text-8xl font-serif font-bold tracking-tighter">
           <span
-            className="inline-block bg-gradient-to-r from-white via-cyan-300 to-white bg-clip-text text-transparent"
+            className="inline-block bg-linear-to-r from-white via-cyan-300 to-white bg-clip-text text-transparent"
             style={{
               backgroundSize: '200% 100%',
               animation: 'shimmer 3s linear infinite',
@@ -79,17 +88,17 @@ export default function PremiumLoader({ onComplete }: PremiumLoaderProps) {
       {/* Percentage Counter */}
       <div className="mb-12 text-center">
         <p className="text-white text-xl font-light tracking-wide tabular-nums">
-          {Math.round(progress)}%
+          {progress}%
         </p>
       </div>
 
       {/* Thin Animated Progress Bar */}
       <div className="w-64 h-0.5 bg-gray-800 rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-transparent via-white to-transparent"
+          className="h-full bg-linear-to-r from-transparent via-white to-transparent"
           style={{
             width: `${progress}%`,
-            transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: 'width 0.28s cubic-bezier(0.4, 0, 0.2, 1)',
             boxShadow: '0 0 20px rgba(34, 211, 238, 0.5)',
           }}
         />
