@@ -61,7 +61,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <section id="stats" className="py-16 md:py-24">
+    <section id="stats" className="pt-5 pb-16 md:pt-7 md:pb-24">
       <div ref={sectionRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Side: Text and Image */}
