@@ -32,7 +32,7 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, ThemeToggleProps>(
       'rounded-lg px-3 py-2 flex items-center gap-2 transition-colors text-zinc-400 hover:bg-white/10 hover:text-white dark:text-gray-500 dark:hover:bg-gray-100 dark:hover:text-gray-900'
 
     if (!mounted) {
-      const label = theme === 'dark' ? 'Light mode' : 'Dark mode'
+      const label = theme === 'dark' ? 'Light' : 'Dark'
       return (
         <button
           ref={ref}
@@ -53,7 +53,7 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, ThemeToggleProps>(
       )
     }
 
-    const label = theme === 'dark' ? 'Light mode' : 'Dark mode'
+    const label = theme === 'dark' ? 'Light' : 'Dark'
 
     return (
       <button
