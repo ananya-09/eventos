@@ -104,7 +104,7 @@ function NavRow({
       <span
         className={cn(
           'select-none truncate transition-[opacity,margin,width] duration-300 ease-in-out',
-          expanded ? 'ml-0 max-w-44 opacity-100 delay-300' : 'ml-0 w-0 max-w-0 overflow-hidden opacity-0 delay-0',
+          expanded ? 'ml-0 max-w-44 opacity-100' : 'ml-0 w-0 max-w-0 overflow-hidden opacity-0',
         )}
       >
         {label}

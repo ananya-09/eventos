@@ -32,7 +32,7 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, ThemeToggleProps>(
       'rounded-lg px-3 py-2 flex items-center gap-2 transition-colors text-zinc-400 hover:bg-white/10 hover:text-white dark:text-gray-500 dark:hover:bg-gray-100 dark:hover:text-gray-900'
 
     if (!mounted) {
-      const label = theme === 'dark' ? 'Light mode' : 'Dark mode'
+      const label = theme === 'dark' ? 'Light' : 'Dark'
       return (
         <button
           ref={ref}
@@ -48,30 +48,12 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, ThemeToggleProps>(
           aria-label="Toggle theme"
         >
           <Sun className="h-5 w-5" />
-          {variant === 'sidebar' ? (
-            <span
-              className={cn(
-                'text-sm font-medium tracking-tight text-zinc-200 dark:text-zinc-100 transition-[opacity,max-width] duration-300 ease-in-out overflow-hidden',
-                showLabel
-                  ? 'opacity-100 max-w-40 delay-300'
-                  : 'opacity-0 max-w-0 delay-0',
-              )}
-              aria-hidden={!showLabel}
-            >
-              {label}
-            </span>
-          ) : (
-            showLabel && (
-              <span className="text-sm font-medium tracking-tight text-zinc-200 dark:text-zinc-100">
-                {label}
-              </span>
-            )
-          )}
+          {showLabel && <span className="text-sm font-medium tracking-tight text-zinc-200 dark:text-zinc-100">{label}</span>}
         </button>
       )
     }
 
-    const label = theme === 'dark' ? 'Light mode' : 'Dark mode'
+    const label = theme === 'dark' ? 'Light' : 'Dark'
 
     return (
       <button
@@ -103,24 +85,10 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, ThemeToggleProps>(
             )}
           />
         )}
-        {variant === 'sidebar' ? (
-          <span
-            className={cn(
-              'text-sm font-medium tracking-tight text-zinc-200 dark:text-zinc-100 transition-[opacity,max-width] duration-300 ease-in-out overflow-hidden',
-              showLabel
-                ? 'opacity-100 max-w-40 delay-300'
-                : 'opacity-0 max-w-0 delay-0',
-            )}
-            aria-hidden={!showLabel}
-          >
+        {showLabel && (
+          <span className="text-sm font-medium tracking-tight text-zinc-200 dark:text-zinc-100">
             {label}
           </span>
-        ) : (
-          showLabel && (
-            <span className="text-sm font-medium tracking-tight text-zinc-200 dark:text-zinc-100">
-              {label}
-            </span>
-          )
         )}
       </button>
     )
