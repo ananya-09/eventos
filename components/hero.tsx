@@ -67,7 +67,7 @@ export default function Hero() {
           {/* Left Side: Text and Image */}
           <div className="space-y-8 hero-left">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight text-balance">
+              <h1 className="text-5xl md:text-6xl font-extrabold text-foreground leading-tight text-balance">
                 Welcome to Eventos
               </h1>
               <p className="mt-4 text-lg text-muted-foreground">

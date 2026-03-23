@@ -47,20 +47,20 @@ export type SidebarProps = {
 
 const rail = {
   aside:
-    'border-r border-zinc-800 bg-zinc-950 transition-[width] duration-300 ease-in-out dark:border-gray-200 dark:bg-white',
-  headerBorder: 'border-zinc-800 dark:border-gray-200',
-  footerBorder: 'border-zinc-800 dark:border-gray-200',
-  logoText: 'text-white dark:text-gray-900',
-  muted: 'text-zinc-400 dark:text-gray-500',
+    'border-r border-zinc-800 bg-zinc-950 transition-[width] duration-300 ease-in-out dark:border-zinc-700 dark:bg-zinc-900',
+  headerBorder: 'border-zinc-800 dark:border-zinc-700',
+  footerBorder: 'border-zinc-800 dark:border-zinc-700',
+  logoText: 'text-white dark:text-zinc-100',
+  muted: 'text-zinc-400 dark:text-zinc-300',
   navInactive:
-    'text-zinc-400 hover:bg-white/5 hover:text-zinc-200 dark:text-gray-500 dark:hover:bg-gray-100 dark:hover:text-gray-900',
+    'text-zinc-400 hover:bg-white/5 hover:text-zinc-200 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-zinc-100',
   navActive:
-    'bg-white/10 text-white dark:bg-gray-100 dark:text-gray-900',
-  navActiveCollapsed: 'bg-zinc-800 dark:bg-gray-200/90',
+    'bg-white/10 text-white dark:bg-white/15 dark:text-zinc-100',
+  navActiveCollapsed: 'bg-zinc-800 dark:bg-zinc-700/90',
   toggleIdle:
-    'text-zinc-400 hover:bg-white/10 hover:text-white dark:text-gray-500 dark:hover:bg-gray-100 dark:hover:text-gray-900',
-  tooltip: 'bg-zinc-800 text-zinc-100 dark:bg-gray-900 dark:text-gray-50',
-  tooltipArrow: 'fill-zinc-800 dark:fill-gray-900',
+    'text-zinc-400 hover:bg-white/10 hover:text-white dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-zinc-100',
+  tooltip: 'bg-zinc-800 text-zinc-100 dark:bg-zinc-700 dark:text-zinc-100',
+  tooltipArrow: 'fill-zinc-800 dark:fill-zinc-700',
 }
 
 function NavRow({
@@ -89,13 +89,13 @@ function NavRow({
         active && !expanded && rail.navActiveCollapsed,
         active &&
           !expanded &&
-          'before:pointer-events-none before:absolute before:left-0 before:top-1/2 before:h-8 before:w-[3px] before:-translate-y-1/2 before:rounded-r-sm before:bg-white dark:before:bg-gray-900',
+          'before:pointer-events-none before:absolute before:left-0 before:top-1/2 before:h-8 before:w-[3px] before:-translate-y-1/2 before:rounded-r-sm before:bg-white dark:before:bg-zinc-100',
       )}
     >
       <Icon
         className={cn(
           'h-5 w-5 shrink-0 transition-transform duration-200 ease-out group-hover:scale-105',
-          active ? 'text-white dark:text-gray-900' : '',
+          active ? 'text-white dark:text-zinc-100' : '',
         )}
         strokeWidth={1.5}
         aria-hidden
@@ -198,26 +198,38 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
               rail.headerBorder,
             )}
           >
-            <span
-              className={cn(
-                'flex h-9 w-9 items-center justify-center rounded-md text-xs font-semibold',
-                'bg-white/10 text-white dark:bg-gray-100 dark:text-gray-900',
-              )}
-              aria-hidden
-            >
-              E
-            </span>
+            {wrapCollapsedTooltip(
+              'collapsed-toggle',
+              'Expand menu',
+              <button
+                type="button"
+                onClick={onToggle}
+                aria-expanded={expanded}
+                aria-controls="sidebar-nav"
+                className={cn(
+                  'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors duration-200',
+                  rail.toggleIdle,
+                )}
+              >
+                <PanelLeft
+                  className="h-5 w-5 text-zinc-200 dark:text-zinc-100"
+                  strokeWidth={1.5}
+                  aria-hidden
+                />
+                <span className="sr-only">Expand menu</span>
+              </button>,
+            )}
           </div>
         )}
 
-        <div
-          className={cn(
-            'flex h-14 shrink-0 items-center border-b',
-            rail.headerBorder,
-            expanded ? 'justify-between gap-2 px-3' : 'justify-center px-2',
-          )}
-        >
-          {expanded && (
+        {expanded && (
+          <div
+            className={cn(
+              'flex h-14 shrink-0 items-center border-b',
+              rail.headerBorder,
+              'justify-between gap-2 px-3',
+            )}
+          >
             <span
               className={cn(
                 'min-w-0 truncate text-sm font-medium tracking-tight',
@@ -226,13 +238,9 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
             >
               Eventos
             </span>
-          )}
-          {wrapCollapsedTooltip(
-            'toggle',
-            expanded ? 'Collapse menu' : 'Expand menu',
-            toggleButton,
-          )}
-        </div>
+            {wrapCollapsedTooltip('toggle', 'Collapse menu', toggleButton)}
+          </div>
+        )}
 
         <nav
           id="sidebar-nav"
@@ -304,7 +312,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
                   onClick={() => signOut()}
                   className={cn(
                     'h-10 w-full justify-center gap-2 rounded-md font-medium',
-                    'text-zinc-300 hover:bg-white/10 hover:text-white dark:text-gray-600 dark:hover:bg-gray-100 dark:hover:text-gray-900',
+                    'text-zinc-300 hover:bg-white/10 hover:text-white dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-zinc-100',
                     !expanded && 'w-10 px-0',
                   )}
                 >
@@ -322,7 +330,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
                 size="sm"
                 onClick={() => signIn('github')}
                 className={cn(
-                  'h-10 w-full gap-2 rounded-md border-zinc-600 bg-zinc-800/50 font-medium text-white hover:bg-zinc-800 dark:border-gray-300 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200',
+                  'h-10 w-full gap-2 rounded-md border-zinc-600 bg-zinc-800/50 font-medium text-white hover:bg-zinc-800 dark:border-zinc-600 dark:bg-zinc-700/60 dark:text-zinc-100 dark:hover:bg-zinc-700',
                   !expanded && 'w-10 px-0',
                 )}
               >
