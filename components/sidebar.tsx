@@ -10,7 +10,6 @@ import type { LucideIcon } from 'lucide-react'
 import {
   Home,
   Info,
-  Mail,
   Tag,
   PanelLeft,
   LifeBuoy,
@@ -30,7 +29,6 @@ export type MenuItem = {
 export const menuItems: MenuItem[] = [
   { label: 'Home', href: '/', icon: Home },
   { label: 'About', href: '/#about', icon: Info },
-  { label: 'Contact', href: '/#contact', icon: Mail },
   { label: 'Pricing', href: '/pricing', icon: Tag },
 ]
 
@@ -68,6 +66,7 @@ function NavRow({
   active,
   href,
   scroll,
+  onClick,
   icon: Icon,
   label,
 }: {
@@ -75,6 +74,7 @@ function NavRow({
   active: boolean
   href: string
   scroll?: boolean
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>
   icon: LucideIcon
   label: string
 }) {
@@ -82,6 +82,7 @@ function NavRow({
     <Link
       href={href}
       scroll={scroll}
+      onClick={onClick}
       className={cn(
         'group relative flex min-h-11 w-full items-center rounded-md text-sm font-medium transition-colors duration-200',
         expanded ? 'justify-start gap-3 px-3 py-3' : 'justify-center px-0 py-3',
@@ -154,12 +155,24 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
 
   const supportActive = pathname === '/' && hash === '#contact'
 
+  const scrollToContact = () => {
+    const el = document.getElementById('contact')
+    if (!el) return
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   const supportLink = (
     <NavRow
       expanded={expanded}
       active={supportActive}
       href="/#contact"
       scroll={false}
+      onClick={(e) => {
+        if (pathname !== '/') return
+        e.preventDefault()
+        window.location.hash = '#contact'
+        window.requestAnimationFrame(scrollToContact)
+      }}
       icon={LifeBuoy}
       label="Support"
     />
@@ -275,6 +288,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
             'Theme',
             <ThemeToggle
               variant="sidebar"
+              showLabel={expanded}
               className={cn(!expanded && 'mx-auto')}
             />,
           )}
