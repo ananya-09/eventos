@@ -153,26 +153,13 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
     )
   }
 
-  const supportActive = pathname === '/' && hash === '#contact'
-
-  const scrollToContact = () => {
-    const el = document.getElementById('contact')
-    if (!el) return
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  const supportActive = pathname === '/contact'
 
   const supportLink = (
     <NavRow
       expanded={expanded}
       active={supportActive}
-      href="/#contact"
-      scroll={false}
-      onClick={(e) => {
-        if (pathname !== '/') return
-        e.preventDefault()
-        window.location.hash = '#contact'
-        window.requestAnimationFrame(scrollToContact)
-      }}
+      href="/contact"
       icon={LifeBuoy}
       label="Support"
     />

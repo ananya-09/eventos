@@ -50,10 +50,10 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="bg-muted/50 py-12 md:py-20 dark:bg-muted/20">
+    <section id="contact" className="py-12 md:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+        <div className="contact-intro mx-auto max-w-3xl text-center">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-6xl">
             Get in Touch
           </h2>
           <p className="mt-3 text-base text-muted-foreground md:text-lg">
@@ -61,7 +61,7 @@ export default function Contact() {
           </p>
         </div>
 
-        <div className="mx-auto mt-12 max-w-5xl rounded-[20px] border border-border/60 bg-card p-6 shadow-lg sm:p-8 md:p-10 lg:p-12 dark:border-border dark:shadow-xl dark:shadow-black/20">
+        <div className="contact-panel mx-auto mt-12 max-w-5xl rounded-[20px] border border-border/60 bg-card p-6 shadow-lg sm:p-8 md:p-10 lg:p-12 dark:border-border dark:shadow-xl dark:shadow-black/20">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
             {/* Form */}
             <div>
