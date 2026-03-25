@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
-import Navbar from '@/components/navbar'
-import Footer from '@/components/footer'
+import AppShell from '@/components/app-shell'
 import LoaderWrapper from '@/components/loader-wrapper'
 import { ThemeProvider } from '@/components/theme-provider'
 import AuthSessionProvider from '@/components/session-provider'
@@ -47,9 +46,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthSessionProvider>
             <LoaderWrapper>
-              <Navbar />
-              <main>{children}</main>
-              <Footer />
+              <AppShell>{children}</AppShell>
               <Toaster richColors />
             </LoaderWrapper>
           </AuthSessionProvider>

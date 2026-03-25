@@ -61,13 +61,13 @@ export default function Hero() {
   }, [])
 
   return (
-    <section id="stats" className="py-16 md:py-24">
+    <section id="stats" className="pt-5 pb-16 md:pt-7 md:pb-24">
       <div ref={sectionRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Side: Text and Image */}
           <div className="space-y-8 hero-left">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight text-balance">
+              <h1 className="text-5xl md:text-6xl font-extrabold text-foreground leading-tight text-balance">
                 Welcome to Eventos
               </h1>
               <p className="mt-4 text-lg text-muted-foreground">
