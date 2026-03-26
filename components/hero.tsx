@@ -2,20 +2,72 @@
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useLayoutEffect, useRef } from 'react'
+import gsap from 'gsap'
 import { FolderKanban, Star, GitFork, CircleDot } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function Hero() {
   const router = useRouter()
+  const sectionRef = useRef<HTMLDivElement | null>(null)
+
+  useLayoutEffect(() => {
+    if (!sectionRef.current) return
+
+    const setup = () => {
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline()
+
+        tl.from('.hero-left', {
+          y: 40,
+          opacity: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+        }).from(
+          '.hero-right',
+          {
+            y: 40,
+            opacity: 0,
+            duration: 0.9,
+            ease: 'power3.out',
+          },
+          '-=0.45',
+        )
+      }, sectionRef)
+
+      return ctx
+    }
+
+    let ctx = undefined as ReturnType<typeof setup> | undefined
+
+    if (typeof window !== 'undefined' && window.sessionStorage.getItem('loaderComplete')) {
+      ctx = setup()
+    } else {
+      const handler = () => {
+        ctx = setup()
+        window.removeEventListener('loaderComplete', handler)
+      }
+      window.addEventListener('loaderComplete', handler)
+
+      return () => {
+        if (ctx) ctx.revert()
+        window.removeEventListener('loaderComplete', handler)
+      }
+    }
+
+    return () => {
+      if (ctx) ctx.revert()
+    }
+  }, [])
 
   return (
-    <section id="stats" className="py-16 md:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="stats" className="pt-5 pb-16 md:pt-7 md:pb-24">
+      <div ref={sectionRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Side: Text and Image */}
-          <div className="space-y-8">
+          <div className="space-y-8 hero-left">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight text-balance">
+              <h1 className="text-5xl md:text-6xl font-extrabold text-foreground leading-tight text-balance">
                 Welcome to Eventos
               </h1>
               <p className="mt-4 text-lg text-muted-foreground">
@@ -35,7 +87,7 @@ export default function Hero() {
           </div>
 
           {/* Right Side: Stat Cards */}
-          <div className="space-y-6">
+          <div className="space-y-6 hero-right">
             {/* Large Card on Top */}
             <div className="bg-white dark:bg-[#151616] rounded-xl p-8 shadow-sm relative border-l-4 border-blue-500">
               <div className="flex items-center gap-3 mb-4">

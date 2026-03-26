@@ -79,6 +79,65 @@ const SEMESTER_OPTIONS: Record<string, string[]> = {
   PhD: ['1st', '2nd', '3rd', '4th', '5th', '6th'],
 }
 
+const UG_COURSES = [
+  'B.Tech',
+  'B.E.',
+  'B.Sc.',
+  'B.Com.',
+  'B.A.',
+  'BBA',
+  'BCA',
+  'B.Arch',
+  'B.Pharm',
+  'MBBS',
+  'B.Sc. (Nursing)',
+  'LLB',
+  'B.Des',
+  'B.Sc. (Agriculture)',
+  'B.Ed.',
+  'Other UG',
+]
+
+const PG_COURSES = [
+  'M.Tech',
+  'M.E.',
+  'M.Sc.',
+  'M.Com.',
+  'M.A.',
+  'MBA',
+  'MCA',
+  'M.Arch',
+  'M.Pharm',
+  'M.S. (Medical)',
+  'M.Sc. (Nursing)',
+  'LLM',
+  'M.Des',
+  'M.Sc. (Agriculture)',
+  'M.Ed.',
+  'Other PG',
+]
+
+const PHD_COURSES = [
+  'PhD (Engineering)',
+  'PhD (Science)',
+  'PhD (Commerce)',
+  'PhD (Arts)',
+  'PhD (Management)',
+  'PhD (Law)',
+  'PhD (Architecture)',
+  'PhD (Pharmacy)',
+  'PhD (Medicine)',
+  'PhD (Nursing)',
+  'PhD (Agriculture)',
+  'Other PhD',
+]
+
+const COURSE_OPTIONS: Record<string, string[]> = {
+  UG: UG_COURSES,
+  PG: PG_COURSES,
+  PhD: PHD_COURSES,
+}
+
 // ─── Zod Schemas ─────────────────────────────────────────────────────────────
 
 const identitySchema = z.object({
@@ -96,6 +155,7 @@ const studentSchema = z.object({
   courseLevel: z.enum(['UG', 'PG', 'PhD'], {
     required_error: 'Please select a course level',
   }),
+  courseName: z.string().min(1, 'Please select a course'),
   branch: z.string().min(1, 'Branch / major is required'),
   yearOfStudy: z.enum(['1st', '2nd', '3rd', '4th'], {
     required_error: 'Please select year of study',
@@ -519,6 +579,7 @@ function StudentStep({ onNext }: { onNext: (data: StudentFormData) => void }) {
       universityName: '',
       universityRollNumber: '',
       courseLevel: undefined,
+      courseName: '',
       branch: '',
       yearOfStudy: undefined,
       semester: '',
@@ -526,6 +587,7 @@ function StudentStep({ onNext }: { onNext: (data: StudentFormData) => void }) {
   })
 
   const courseLevel = form.watch('courseLevel')
+  const courseOptions = courseLevel ? COURSE_OPTIONS[courseLevel] : []
   const semesterOptions = courseLevel ? SEMESTER_OPTIONS[courseLevel] : []
 
   return (
@@ -669,6 +731,7 @@ function StudentStep({ onNext }: { onNext: (data: StudentFormData) => void }) {
               <Select
                 onValueChange={(val) => {
                   field.onChange(val)
+                  form.setValue('courseName', '')
                   form.setValue('semester', '')
                 }}
                 defaultValue={field.value}
@@ -682,6 +745,47 @@ function StudentStep({ onNext }: { onNext: (data: StudentFormData) => void }) {
                   {(['UG', 'PG', 'PhD'] as const).map((level) => (
                     <SelectItem key={level} value={level}>
                       {level}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Course */}
+        <FormField
+          control={form.control}
+          name="courseName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Course{' '}
+                <span className="text-destructive" aria-hidden="true">
+                  *
+                </span>
+              </FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                disabled={!courseLevel}
+              >
+                <FormControl>
+                  <SelectTrigger className="rounded-xl h-11">
+                    <SelectValue
+                      placeholder={
+                        courseLevel
+                          ? 'Select course'
+                          : 'Select course level first'
+                      }
+                    />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {courseOptions.map((course) => (
+                    <SelectItem key={course} value={course}>
+                      {course}
                     </SelectItem>
                   ))}
                 </SelectContent>

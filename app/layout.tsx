@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import Navbar from '@/components/navbar'
-import Footer from '@/components/footer'
+import { Manrope } from 'next/font/google'
+import AppShell from '@/components/app-shell'
 import LoaderWrapper from '@/components/loader-wrapper'
 import { ThemeProvider } from '@/components/theme-provider'
 import AuthSessionProvider from '@/components/session-provider'
@@ -30,6 +30,11 @@ export const metadata: Metadata = {
   },
 }
 
+const fontSans = Manrope({
+  subsets: ['latin'],
+  display: 'swap',
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -37,13 +42,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-sans antialiased">
+      <body className={`${fontSans.className} font-sans antialiased`}>
         <ThemeProvider>
           <AuthSessionProvider>
             <LoaderWrapper>
-              <Navbar />
-              <main>{children}</main>
-              <Footer />
+              <AppShell>{children}</AppShell>
               <Toaster richColors />
             </LoaderWrapper>
           </AuthSessionProvider>
