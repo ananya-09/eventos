@@ -26,10 +26,10 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, ThemeToggleProps>(
     }, [])
 
     const sidebarButtonIconOnly =
-      'rounded-lg p-2 transition-colors text-zinc-400 hover:bg-white/10 hover:text-white dark:text-gray-500 dark:hover:bg-gray-100 dark:hover:text-gray-900'
+      'rounded-lg p-2 transition-colors text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground'
 
     const sidebarButtonWithLabel =
-      'rounded-lg px-3 py-2 flex items-center gap-2 transition-colors text-zinc-400 hover:bg-white/10 hover:text-white dark:text-gray-500 dark:hover:bg-gray-100 dark:hover:text-gray-900'
+      'rounded-lg px-3 py-2 flex items-center gap-2 transition-colors text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground'
 
     if (!mounted) {
       const label = theme === 'dark' ? 'Light' : 'Dark'
@@ -48,7 +48,7 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, ThemeToggleProps>(
           aria-label="Toggle theme"
         >
           <Sun className="h-5 w-5" />
-          {showLabel && <span className="text-sm font-medium tracking-tight text-zinc-200 dark:text-zinc-100">{label}</span>}
+          {showLabel && <span className="text-sm font-medium tracking-tight text-sidebar-foreground">{label}</span>}
         </button>
       )
     }
@@ -74,19 +74,19 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, ThemeToggleProps>(
           <Sun
             className={cn(
               'h-5 w-5',
-              variant === 'sidebar' ? 'text-amber-400' : 'text-yellow-400',
+              variant === 'sidebar' ? 'text-primary' : 'text-primary',
             )}
           />
         ) : (
           <Moon
             className={cn(
               'h-5 w-5',
-              variant === 'sidebar' ? 'text-zinc-200' : 'text-slate-700',
+              variant === 'sidebar' ? 'text-sidebar-foreground' : 'text-accent',
             )}
           />
         )}
         {showLabel && (
-          <span className="text-sm font-medium tracking-tight text-zinc-200 dark:text-zinc-100">
+          <span className="text-sm font-medium tracking-tight text-sidebar-foreground">
             {label}
           </span>
         )}

@@ -87,12 +87,12 @@ export default function SaaSGridBackground({
 
     const rng = mulberry32(hashToSeed(seed))
 
-    // Minimal palette with very low opacity.
+    // Theme palette stays inside blue/purple/white accents.
     const palette = [
       { r: 59, g: 130, b: 246 }, // blue
       { r: 139, g: 92, b: 246 }, // purple
-      { r: 236, g: 72, b: 153 }, // pink
-      { r: 34, g: 211, b: 238 }, // cyan (still subtle)
+      { r: 99, g: 102, b: 241 }, // indigo
+      { r: 255, g: 255, b: 255 }, // white glow
     ]
 
     const placed = new Set<string>()
@@ -160,7 +160,7 @@ export default function SaaSGridBackground({
   }, [dims, gridSize, squaresCount, seed, minSquareOpacity, maxSquareOpacity])
 
   const gridLines = useMemo(() => {
-    const lineColor = 'rgba(0,0,0,0.05)'
+    const lineColor = 'rgba(91, 102, 255, 0.14)'
     return {
       backgroundImage: `
         linear-gradient(to right, ${lineColor} 1px, transparent 1px),
@@ -172,15 +172,27 @@ export default function SaaSGridBackground({
     } as const
   }, [gridSize])
 
-  // Radial overlay: centered so left and right both keep subtle grid/squares visible (not washed out on one side).
-  const radialOverlay = useMemo(() => {
+  const lightOverlay = useMemo(() => {
     return {
       background: `
         radial-gradient(
           ellipse 85% 70% at 50% 18%,
-          rgba(249, 250, 251, 0) 0%,
-          rgba(249, 250, 251, 0.35) 45%,
-          rgba(249, 250, 251, 0.92) 100%
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.4) 45%,
+          rgba(245, 248, 255, 0.95) 100%
+        )
+      `,
+    } as const
+  }, [])
+
+  const darkOverlay = useMemo(() => {
+    return {
+      background: `
+        radial-gradient(
+          ellipse 85% 70% at 50% 18%,
+          rgba(14, 16, 30, 0) 0%,
+          rgba(14, 16, 30, 0.42) 45%,
+          rgba(9, 10, 20, 0.9) 100%
         )
       `,
     } as const
@@ -190,7 +202,7 @@ export default function SaaSGridBackground({
     <section
       ref={ref}
       className={cn(
-        'relative min-h-screen w-full overflow-hidden bg-[#f9fafb]',
+        'relative min-h-screen w-full overflow-hidden bg-background',
         // Ensure the grid/squares do not affect child stacking.
         'transform-gpu',
         className,
@@ -222,8 +234,9 @@ export default function SaaSGridBackground({
         ))}
       </div>
 
-      {/* Radial fade overlay (keeps the design clean near edges) */}
-      <div aria-hidden className="absolute inset-0" style={radialOverlay} />
+      {/* Radial fade overlays for light/dark themes */}
+      <div aria-hidden className="absolute inset-0 dark:hidden" style={lightOverlay} />
+      <div aria-hidden className="absolute inset-0 hidden dark:block" style={darkOverlay} />
 
       {/* Content sits above the background */}
       <div className="relative z-10">{children}</div>

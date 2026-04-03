@@ -7,13 +7,13 @@ export const metadata = {
 
 export default function RegisterPage() {
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-b from-amber-50/40 to-background dark:from-amber-950/10 dark:to-background p-4 py-12">
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-linear-to-b from-primary/8 via-background to-accent/8 p-4 py-12">
       <div className="w-full max-w-md">
         {/* Card */}
-        <div className="bg-white dark:bg-[#151616] rounded-2xl shadow-lg border border-border/40 p-8">
+        <div className="register-card glass-surface-strong rounded-2xl p-8">
           {/* Brand header */}
           <div className="text-center mb-8">
-            <p className="text-xs font-semibold tracking-widest text-amber-500 uppercase mb-1">
+            <p className="text-xs font-semibold tracking-widest text-primary uppercase mb-1">
               Eventos
             </p>
             <h1 className="text-2xl font-bold text-foreground">

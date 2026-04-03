@@ -45,20 +45,20 @@ export type SidebarProps = {
 
 const rail = {
   aside:
-    'border-r border-zinc-800 bg-zinc-950 transition-[width] duration-300 ease-in-out dark:border-zinc-700 dark:bg-zinc-900',
-  headerBorder: 'border-zinc-800 dark:border-zinc-700',
-  footerBorder: 'border-zinc-800 dark:border-zinc-700',
-  logoText: 'text-white dark:text-zinc-100',
-  muted: 'text-zinc-400 dark:text-zinc-300',
+    'border-r border-sidebar-border bg-sidebar/80 backdrop-blur-xl transition-[width] duration-300 ease-in-out',
+  headerBorder: 'border-sidebar-border',
+  footerBorder: 'border-sidebar-border',
+  logoText: 'text-sidebar-foreground',
+  muted: 'text-sidebar-foreground/70',
   navInactive:
-    'text-zinc-400 hover:bg-white/5 hover:text-zinc-200 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-zinc-100',
+    'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground',
   navActive:
-    'bg-white/10 text-white dark:bg-white/15 dark:text-zinc-100',
-  navActiveCollapsed: 'bg-zinc-800 dark:bg-zinc-700/90',
+    'bg-sidebar-primary/25 text-sidebar-foreground',
+  navActiveCollapsed: 'bg-sidebar-primary/28',
   toggleIdle:
-    'text-zinc-400 hover:bg-white/10 hover:text-white dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-zinc-100',
-  tooltip: 'bg-zinc-800 text-zinc-100 dark:bg-zinc-700 dark:text-zinc-100',
-  tooltipArrow: 'fill-zinc-800 dark:fill-zinc-700',
+    'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground',
+  tooltip: 'glass-surface text-foreground',
+  tooltipArrow: 'fill-card',
 }
 
 function NavRow({
@@ -90,13 +90,13 @@ function NavRow({
         active && !expanded && rail.navActiveCollapsed,
         active &&
           !expanded &&
-          'before:pointer-events-none before:absolute before:left-0 before:top-1/2 before:h-8 before:w-0.75 before:-translate-y-1/2 before:rounded-r-sm before:bg-white dark:before:bg-zinc-100',
+          'before:pointer-events-none before:absolute before:left-0 before:top-1/2 before:h-8 before:w-0.75 before:-translate-y-1/2 before:rounded-r-sm before:bg-primary',
       )}
     >
       <Icon
         className={cn(
           'h-5 w-5 shrink-0 transition-transform duration-200 ease-out group-hover:scale-105',
-          active ? 'text-white dark:text-zinc-100' : '',
+          active ? 'text-primary' : '',
         )}
         strokeWidth={1.5}
         aria-hidden
@@ -185,7 +185,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
     <TooltipPrimitive.Provider delayDuration={200} skipDelayDuration={0}>
       <aside
         className={cn(
-          'fixed left-0 top-0 z-40 flex h-screen w-60 flex-col transition-transform duration-300 ease-in-out md:w-auto md:transition-[width]',
+          'fixed left-0 top-0 z-40 flex h-screen w-60 flex-col transition-transform duration-300 ease-in-out md:fixed md:left-0 md:top-0 md:z-20 md:w-auto md:shrink-0 md:transition-[width]',
           rail.aside,
           expanded ? 'translate-x-0 md:w-60' : '-translate-x-full md:translate-x-0 md:w-16',
         )}
@@ -212,7 +212,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
                 )}
               >
                 <PanelLeft
-                  className="h-5 w-5 text-zinc-200 dark:text-zinc-100"
+                  className="h-5 w-5 text-sidebar-foreground"
                   strokeWidth={1.5}
                   aria-hidden
                 />
@@ -313,7 +313,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
                   onClick={() => signOut()}
                   className={cn(
                     'h-10 w-full justify-center gap-2 rounded-md font-medium',
-                    'text-zinc-300 hover:bg-white/10 hover:text-white dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-zinc-100',
+                    'text-sidebar-foreground/85 hover:bg-sidebar-accent hover:text-sidebar-foreground',
                     !expanded && 'w-10 px-0',
                   )}
                 >
@@ -331,7 +331,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
                 size="sm"
                 onClick={() => signIn('github')}
                 className={cn(
-                  'h-10 w-full gap-2 rounded-md border-zinc-600 bg-zinc-800/50 font-medium text-white hover:bg-zinc-800 dark:border-zinc-600 dark:bg-zinc-700/60 dark:text-zinc-100 dark:hover:bg-zinc-700',
+                  'h-10 w-full gap-2 rounded-md border border-sidebar-border bg-sidebar-accent/80 font-medium text-sidebar-foreground hover:bg-sidebar-accent',
                   !expanded && 'w-10 px-0',
                 )}
               >

@@ -4,8 +4,8 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer className="bg-primary/5 border-t border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="mt-8 px-4 pb-6 sm:px-6 lg:px-8">
+      <div className="glass-surface max-w-7xl mx-auto rounded-3xl px-4 sm:px-6 lg:px-8 py-12 bg-linear-to-br from-primary/6 via-card/85 to-accent/8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
           <div>
@@ -77,7 +77,7 @@ export default function Footer() {
                 <Link
                   key={social}
                   href="#"
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all"
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-primary/12 text-primary hover:bg-primary hover:text-primary-foreground transition-all"
                 >
                   <span className="text-xs font-bold">{social.charAt(0)}</span>
                 </Link>
@@ -87,7 +87,7 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-border pt-8 flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground">
+        <div className="border-t border-border/70 pt-8 flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground">
           <p>&copy; 2024 EventHub. All rights reserved.</p>
           <div className="flex gap-6 mt-4 sm:mt-0">
             <Link href="#" className="hover:text-foreground transition-colors">

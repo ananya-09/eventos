@@ -61,7 +61,7 @@ export default function Contact() {
           </p>
         </div>
 
-        <div className="contact-panel mx-auto mt-12 max-w-5xl rounded-[20px] border border-border/60 bg-card p-6 shadow-lg sm:p-8 md:p-10 lg:p-12 dark:border-border dark:shadow-xl dark:shadow-black/20">
+        <div className="contact-panel glass-surface mx-auto mt-12 max-w-5xl rounded-[20px] p-6 sm:p-8 md:p-10 lg:p-12">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
             {/* Form */}
             <div>
@@ -106,17 +106,17 @@ export default function Contact() {
                     required
                     rows={5}
                     placeholder="Tell us how we can help you..."
-                    className="min-h-[140px] resize-y rounded-xl border-border bg-background px-4 py-3 text-foreground dark:bg-input/40"
+                    className="min-h-35 resize-y rounded-xl border-border bg-background px-4 py-3 text-foreground dark:bg-input/40"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-zinc-900 text-sm font-medium text-white shadow-sm transition-opacity hover:opacity-90 dark:bg-white dark:text-zinc-900 dark:hover:opacity-90"
+                  className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
                 >
                   {iconsReady ? (
                     <ion-icon
                       name="paper-plane-outline"
-                      className="text-lg text-white dark:text-zinc-900"
+                      className="text-lg text-primary-foreground"
                       aria-hidden
                     />
                   ) : null}

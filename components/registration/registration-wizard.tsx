@@ -247,9 +247,9 @@ function StepProgressBar({
           className={cn(
             'h-1.5 rounded-full flex-1 transition-all duration-300',
             i < current
-              ? 'bg-amber-500'
+              ? 'bg-indigo-500'
               : i === current
-                ? 'bg-amber-300'
+                ? 'bg-indigo-300'
                 : 'bg-muted',
           )}
         />
@@ -288,7 +288,7 @@ function AuthStep({ onAuthenticated }: { onAuthenticated: () => void }) {
         <Button
           type="button"
           variant="outline"
-          className="w-full flex items-center gap-3 h-11 rounded-xl border-border/60 hover:bg-amber-50 dark:hover:bg-amber-950/20 hover:border-amber-300 transition-colors"
+          className="w-full flex items-center gap-3 h-11 rounded-xl border-border/60 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 hover:border-indigo-300 transition-colors"
           onClick={() => signIn('google', { callbackUrl })}
         >
           <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
@@ -315,7 +315,7 @@ function AuthStep({ onAuthenticated }: { onAuthenticated: () => void }) {
         <Button
           type="button"
           variant="outline"
-          className="w-full flex items-center gap-3 h-11 rounded-xl border-border/60 hover:bg-amber-50 dark:hover:bg-amber-950/20 hover:border-amber-300 transition-colors"
+          className="w-full flex items-center gap-3 h-11 rounded-xl border-border/60 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 hover:border-indigo-300 transition-colors"
           onClick={() => signIn('github', { callbackUrl })}
         >
           <Github className="w-5 h-5 shrink-0" />
@@ -384,7 +384,7 @@ function EmailSignInForm() {
       />
       <Button
         type="submit"
-        className="h-11 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white shrink-0"
+        className="h-11 px-4 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white shrink-0"
       >
         Continue
       </Button>
@@ -475,7 +475,7 @@ function IdentityStep({
 
         <Button
           type="submit"
-          className="w-full h-11 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-medium"
+          className="w-full h-11 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-medium"
         >
           Continue <ChevronRight className="w-4 h-4 ml-1" />
         </Button>
@@ -531,15 +531,15 @@ function RoleStep({ onNext }: { onNext: (role: Role) => void }) {
             className={cn(
               'w-full flex items-center gap-4 p-4 rounded-xl border text-left transition-all duration-200',
               selected === value
-                ? 'border-amber-400 bg-amber-50 dark:bg-amber-950/20 shadow-sm'
-                : 'border-border hover:border-amber-300 hover:bg-muted/50',
+                ? 'border-indigo-400 bg-indigo-50 dark:bg-indigo-950/20 shadow-sm'
+                : 'border-border hover:border-indigo-300 hover:bg-muted/50',
             )}
           >
             <div
               className={cn(
                 'p-2 rounded-lg shrink-0',
                 selected === value
-                  ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-600'
+                  ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600'
                   : 'bg-muted text-muted-foreground',
               )}
             >
@@ -550,7 +550,7 @@ function RoleStep({ onNext }: { onNext: (role: Role) => void }) {
               <p className="text-xs text-muted-foreground">{description}</p>
             </div>
             {selected === value && (
-              <CheckCircle2 className="w-4 h-4 text-amber-500 ml-auto shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-indigo-500 ml-auto shrink-0" />
             )}
           </button>
         ))}
@@ -560,7 +560,7 @@ function RoleStep({ onNext }: { onNext: (role: Role) => void }) {
         type="button"
         disabled={!selected}
         onClick={() => selected && onNext(selected)}
-        className="w-full h-11 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-medium disabled:opacity-50"
+        className="w-full h-11 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-medium disabled:opacity-50"
       >
         Continue <ChevronRight className="w-4 h-4 ml-1" />
       </Button>
@@ -893,7 +893,7 @@ function StudentStep({ onNext }: { onNext: (data: StudentFormData) => void }) {
 
         <Button
           type="submit"
-          className="w-full h-11 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-medium"
+          className="w-full h-11 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-medium"
         >
           Continue <ChevronRight className="w-4 h-4 ml-1" />
         </Button>
@@ -1109,7 +1109,7 @@ function EducatorStep({
 
         <Button
           type="submit"
-          className="w-full h-11 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-medium"
+          className="w-full h-11 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-medium"
         >
           Submit Registration <ChevronRight className="w-4 h-4 ml-1" />
         </Button>
@@ -1259,7 +1259,7 @@ function ProfessionalStep({
 
         <Button
           type="submit"
-          className="w-full h-11 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-medium"
+          className="w-full h-11 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-medium"
         >
           Submit Registration <ChevronRight className="w-4 h-4 ml-1" />
         </Button>
@@ -1307,14 +1307,14 @@ function SocialMediaStep({
           <Button
             type="button"
             variant="outline"
-            className="h-12 rounded-xl border-border/60 hover:border-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/20 transition-colors"
+            className="h-12 rounded-xl border-border/60 hover:border-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 transition-colors"
             onClick={onSkip}
           >
             No, skip for now
           </Button>
           <Button
             type="button"
-            className="h-12 rounded-xl bg-amber-500 hover:bg-amber-600 text-white"
+            className="h-12 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white"
             onClick={() => setAddNow(true)}
           >
             Yes, add now
@@ -1442,14 +1442,14 @@ function SocialMediaStep({
         <button
           type="button"
           onClick={() => append({ platformName: '', publicLink: '' })}
-          className="flex items-center gap-2 text-sm text-amber-600 hover:text-amber-700 transition-colors w-full justify-center py-2.5 rounded-xl border border-dashed border-amber-300 hover:border-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/10"
+          className="flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 transition-colors w-full justify-center py-2.5 rounded-xl border border-dashed border-indigo-300 hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/10"
         >
           <Plus className="w-4 h-4" /> Add another platform
         </button>
 
         <Button
           type="submit"
-          className="w-full h-11 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-medium"
+          className="w-full h-11 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-medium"
         >
           Submit Registration
         </Button>
@@ -1464,8 +1464,8 @@ function ThankYouStep({ onClose }: { onClose: () => void }) {
   return (
     <div className="space-y-6 text-center py-4">
       <div className="flex justify-center">
-        <div className="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-          <CheckCircle2 className="w-8 h-8 text-amber-500" />
+        <div className="w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
+          <CheckCircle2 className="w-8 h-8 text-indigo-500" />
         </div>
       </div>
 
@@ -1553,7 +1553,7 @@ export function RegistrationWizard() {
   if (step === null) {
     return (
       <div className="flex items-center justify-center py-16">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
+        <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
       </div>
     )
   }

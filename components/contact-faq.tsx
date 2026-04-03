@@ -65,13 +65,13 @@ const faqs = [
 
 export default function ContactFaq() {
   return (
-    <section className="contact-faq-section bg-[#f3f4f6] py-16 md:py-24 dark:bg-muted/20">
+    <section className="contact-faq-section bg-transparent py-16 md:py-24">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <h2 className="text-center text-3xl font-bold tracking-tight text-foreground">
           Frequently asked questions
         </h2>
 
-        <div className="contact-faq-panel mt-8 rounded-2xl border border-border bg-white p-3 shadow-sm dark:bg-card">
+        <div className="contact-faq-panel glass-surface mt-8 rounded-2xl p-3">
           <Accordion type="single" collapsible>
             {faqs.map((item) => (
               <AccordionItem key={item.id} value={item.id} className="border-border">
@@ -95,7 +95,7 @@ export default function ContactFaq() {
           <Button
             type="button"
             variant="secondary"
-            className="h-9 rounded-full bg-zinc-900 px-5 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="h-9 rounded-full bg-primary px-5 text-xs font-semibold text-primary-foreground hover:bg-primary/90"
           >
             Load more
           </Button>

@@ -4,7 +4,6 @@ import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import Contact from '@/components/contact'
 import ContactFaq from '@/components/contact-faq'
-import SaaSGridBackground from '@/components/saas-grid-background'
 
 export default function ContactPageView() {
   const rootRef = useRef<HTMLDivElement | null>(null)
@@ -111,9 +110,7 @@ export default function ContactPageView() {
   return (
     <div ref={rootRef} className="min-h-screen">
       <div className="contact-page-bg">
-        <SaaSGridBackground className="min-h-0">
-          <Contact />
-        </SaaSGridBackground>
+        <Contact />
       </div>
       <ContactFaq />
     </div>

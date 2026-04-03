@@ -89,13 +89,13 @@ export default function Hero() {
           {/* Right Side: Stat Cards */}
           <div className="space-y-6 hero-right">
             {/* Large Card on Top */}
-            <div className="bg-white dark:bg-[#151616] rounded-xl p-8 shadow-sm relative border-l-4 border-blue-500">
+            <div className="glass-surface hero-stat-card rounded-xl p-8 relative border-l-4 border-primary">
               <div className="flex items-center gap-3 mb-4">
-                <FolderKanban className="w-8 h-8 text-blue-500" strokeWidth={1.5} />
+                <FolderKanban className="w-8 h-8 text-primary" strokeWidth={1.5} />
               </div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-2">Total Registrations</p>
-              <p className="text-4xl md:text-5xl font-bold text-black dark:text-white mb-4">1,245</p>
-              <Button className="bg-blue-500 hover:bg-blue-600 text-white w-full" onClick={() => router.push('/register')}>
+              <p className="text-sm text-muted-foreground font-medium mb-2">Total Registrations</p>
+              <p className="text-4xl md:text-5xl font-bold text-foreground mb-4">1,245</p>
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground w-full" onClick={() => router.push('/register')}>
                 Register Now
               </Button>
             </div>
@@ -103,30 +103,30 @@ export default function Hero() {
             {/* Three Cards Below */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Teams Card */}
-              <div className="bg-white dark:bg-[#151616] rounded-xl p-6 shadow-sm relative border-l-4 border-orange-500">
+              <div className="glass-surface hero-stat-card rounded-xl p-6 relative border-l-4 border-accent">
                 <div className="flex items-center gap-3 mb-3">
-                  <Star className="w-6 h-6 text-orange-500" strokeWidth={1.5} />
+                  <Star className="w-6 h-6 text-accent" strokeWidth={1.5} />
                 </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-1">Teams</p>
-                <p className="text-3xl font-bold text-black dark:text-white">320</p>
+                <p className="text-sm text-muted-foreground font-medium mb-1">Teams</p>
+                <p className="text-3xl font-bold text-foreground">320</p>
               </div>
 
               {/* Workshops Card */}
-              <div className="bg-white dark:bg-[#151616] rounded-xl p-6 shadow-sm relative border-l-4 border-cyan-500">
+              <div className="glass-surface hero-stat-card rounded-xl p-6 relative border-l-4 border-primary/80">
                 <div className="flex items-center gap-3 mb-3">
-                  <GitFork className="w-6 h-6 text-cyan-500" strokeWidth={1.5} />
+                  <GitFork className="w-6 h-6 text-primary/90" strokeWidth={1.5} />
                 </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-1">Workshops</p>
-                <p className="text-3xl font-bold text-black dark:text-white">18</p>
+                <p className="text-sm text-muted-foreground font-medium mb-1">Workshops</p>
+                <p className="text-3xl font-bold text-foreground">18</p>
               </div>
 
               {/* Speakers Card */}
-              <div className="bg-white dark:bg-[#151616] rounded-xl p-6 shadow-sm relative border-l-4 border-green-500">
+              <div className="glass-surface hero-stat-card rounded-xl p-6 relative border-l-4 border-violet-500">
                 <div className="flex items-center gap-3 mb-3">
-                  <CircleDot className="w-6 h-6 text-green-500" strokeWidth={1.5} />
+                  <CircleDot className="w-6 h-6 text-violet-500" strokeWidth={1.5} />
                 </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-1">Speakers</p>
-                <p className="text-3xl font-bold text-black dark:text-white">42</p>
+                <p className="text-sm text-muted-foreground font-medium mb-1">Speakers</p>
+                <p className="text-3xl font-bold text-foreground">42</p>
               </div>
             </div>
           </div>
