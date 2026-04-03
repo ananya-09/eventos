@@ -90,7 +90,7 @@ function NavRow({
         active && !expanded && rail.navActiveCollapsed,
         active &&
           !expanded &&
-          'before:pointer-events-none before:absolute before:left-0 before:top-1/2 before:h-8 before:w-[3px] before:-translate-y-1/2 before:rounded-r-sm before:bg-white dark:before:bg-zinc-100',
+          'before:pointer-events-none before:absolute before:left-0 before:top-1/2 before:h-8 before:w-0.75 before:-translate-y-1/2 before:rounded-r-sm before:bg-white dark:before:bg-zinc-100',
       )}
     >
       <Icon
@@ -185,9 +185,9 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
     <TooltipPrimitive.Provider delayDuration={200} skipDelayDuration={0}>
       <aside
         className={cn(
-          'fixed left-0 top-0 z-40 flex h-screen flex-col',
+          'fixed left-0 top-0 z-40 flex h-screen w-60 flex-col transition-transform duration-300 ease-in-out md:w-auto md:transition-[width]',
           rail.aside,
-          expanded ? 'w-60' : 'w-16',
+          expanded ? 'translate-x-0 md:w-60' : '-translate-x-full md:translate-x-0 md:w-16',
         )}
         aria-label="Main navigation"
       >

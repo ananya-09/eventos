@@ -80,15 +80,7 @@ export default function ContactPageView() {
             },
             '-=0.55',
           )
-          .from(
-            '.contact-faq-cta',
-            {
-              y: 36,
-              opacity: 0,
-              duration: 0.82,
-            },
-            '-=0.48',
-          )
+          
       }, rootRef)
 
       return ctx
