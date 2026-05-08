@@ -14,7 +14,7 @@ import {
   MessagesSquare,
   Settings,
   PanelLeft,
-  LifeBuoy,
+  Headset,
   LogIn,
   LogOut,
 } from 'lucide-react'
@@ -31,8 +31,8 @@ export type MenuItem = {
 export const menuItems: MenuItem[] = [
   { label: 'Home', href: '/', icon: Home },
   { label: 'Calendar', href: '/#calendar', icon: Calendar },
-  { label: 'Attendees', href: '/contact', icon: Users },
-  { label: 'Messages', href: '/pricing', icon: MessagesSquare },
+  { label: 'Attendees', href:'#', icon: Users },
+  { label: 'Pricing', href: '/pricing', icon: MessagesSquare },
   { label: 'Settings', href: '/register', icon: Settings },
 ]
 
@@ -45,11 +45,12 @@ function routeActive(pathname: string, hash: string, href: string): boolean {
 export type SidebarProps = {
   expanded: boolean
   onToggle: () => void
+  style?: React.CSSProperties
 }
 
 const rail = {
   aside:
-    'rounded-3xl border border-white/45 bg-white/60 shadow-[0_22px_58px_-34px_rgba(152,105,65,0.45)] backdrop-blur-3xl transition-[width,transform] duration-300 ease-in-out dark:border-white/10 dark:bg-slate-900/50 dark:shadow-[0_24px_58px_-34px_rgba(6,8,24,0.85)]',
+    'rounded-3xl border border-slate-200 bg-white/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] backdrop-blur-3xl transition-[width,transform] duration-300 ease-in-out dark:border-white/10 dark:bg-slate-900/50 dark:shadow-[0_24px_58px_-34px_rgba(6,8,24,0.85)]',
   headerBorder: 'border-white/40 dark:border-white/10',
   footerBorder: 'border-white/40 dark:border-white/10',
   logoText: 'text-[#1A1A40] dark:text-slate-100',
@@ -117,7 +118,7 @@ function NavRow({
   )
 }
 
-export function Sidebar({ expanded, onToggle }: SidebarProps) {
+export function Sidebar({ expanded, onToggle, style }: SidebarProps) {
   const pathname = usePathname()
   const [hash, setHash] = useState('')
   const { data: session } = useSession()
@@ -164,7 +165,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
       expanded={expanded}
       active={supportActive}
       href="/contact"
-      icon={LifeBuoy}
+      icon={Headset}
       label="Support"
     />
   )
@@ -188,6 +189,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
   return (
     <TooltipPrimitive.Provider delayDuration={200} skipDelayDuration={0}>
       <aside
+        style={style}
         className={cn(
           'fixed left-3 top-3 z-40 flex h-[calc(100vh-1.5rem)] w-60 flex-col transition-transform duration-300 ease-in-out md:left-4 md:top-4 md:z-20 md:h-[calc(100vh-2rem)] md:w-auto md:shrink-0 md:transition-[width]',
           rail.aside,

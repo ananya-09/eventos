@@ -48,7 +48,7 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, ThemeToggleProps>(
           aria-label="Toggle theme"
         >
           <Sun className="h-5 w-5" />
-          {showLabel && <span className="text-sm font-medium tracking-tight text-zinc-200 dark:text-zinc-100">{label}</span>}
+          {showLabel && <span className={cn("text-sm font-medium tracking-tight", variant === 'sidebar' ? "text-stone-700 dark:text-slate-300" : "text-zinc-200 dark:text-zinc-100")}>{label}</span>}
         </button>
       )
     }
@@ -74,19 +74,22 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, ThemeToggleProps>(
           <Sun
             className={cn(
               'h-5 w-5',
-              variant === 'sidebar' ? 'text-amber-400' : 'text-yellow-400',
+              variant === 'sidebar' ? 'text-stone-700 dark:text-slate-300' : 'text-yellow-400',
             )}
           />
         ) : (
           <Moon
             className={cn(
               'h-5 w-5',
-              variant === 'sidebar' ? 'text-zinc-200' : 'text-slate-700',
+              variant === 'sidebar' ? 'text-stone-700 dark:text-slate-300' : 'text-slate-700',
             )}
           />
         )}
         {showLabel && (
-          <span className="text-sm font-medium tracking-tight text-zinc-200 dark:text-zinc-100">
+          <span className={cn(
+            "text-sm font-medium tracking-tight",
+            variant === 'sidebar' ? "text-stone-700 dark:text-slate-300" : "text-zinc-200 dark:text-zinc-100"
+          )}>
             {label}
           </span>
         )}
