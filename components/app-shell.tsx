@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { PanelLeft } from 'lucide-react'
 import Footer from '@/components/footer'
 import GetStartedSection from '@/components/get-started-section'
@@ -11,9 +11,33 @@ import { cn } from '@/lib/utils'
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const [sidebarExpanded, setSidebarExpanded] = useState(false)
+  const [sidebarOpacity, setSidebarOpacity] = useState(1)
+  const footerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        let ratio = entry.intersectionRatio
+        if (ratio > 0.4) ratio = 0.4
+        
+        const opacity = 1 - (ratio / 0.4)
+        setSidebarOpacity(opacity)
+      },
+      {
+        root: null,
+        threshold: Array.from({ length: 101 }, (_, i) => i * 0.01),
+      }
+    )
+
+    if (footerRef.current) {
+      observer.observe(footerRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="flex flex-col min-h-screen overflow-x-hidden">
       <Button
         type="button"
         variant="outline"
@@ -37,19 +61,28 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <Sidebar
         expanded={sidebarExpanded}
         onToggle={() => setSidebarExpanded((v) => !v)}
+        style={{ 
+          opacity: sidebarOpacity, 
+          pointerEvents: sidebarOpacity < 0.1 ? 'none' : 'auto',
+          transition: 'opacity 0.1s ease-out, transform 300ms ease-in-out, width 300ms ease-in-out'
+        }}
       />
+      
       <SaaSGridBackground
         className={cn(
-          'min-h-screen min-w-0 transition-[padding-left] duration-300 ease-in-out',
-          sidebarExpanded ? 'md:pl-60' : 'md:pl-16',
+          'flex-1 min-w-0 transition-[padding-left] duration-300 ease-in-out',
+          sidebarExpanded ? 'md:pl-[17.5rem]' : 'md:pl-[6.5rem]',
         )}
       >
-        <div className="flex min-h-screen flex-col">
+        <div className="flex flex-col h-full px-4 pt-16 md:pr-6 md:pt-4 pb-12">
           <main className="flex-1">{children}</main>
           <GetStartedSection />
-          <Footer />
         </div>
       </SaaSGridBackground>
+
+      <div ref={footerRef} className="w-full">
+        <Footer />
+      </div>
     </div>
   )
 }

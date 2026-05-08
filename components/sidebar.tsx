@@ -9,10 +9,12 @@ import * as TooltipPrimitive from '@radix-ui/react-tooltip'
 import type { LucideIcon } from 'lucide-react'
 import {
   Home,
-  Info,
-  Tag,
+  Calendar,
+  Users,
+  MessagesSquare,
+  Settings,
   PanelLeft,
-  LifeBuoy,
+  Headset,
   LogIn,
   LogOut,
 } from 'lucide-react'
@@ -28,8 +30,10 @@ export type MenuItem = {
 
 export const menuItems: MenuItem[] = [
   { label: 'Home', href: '/', icon: Home },
-  { label: 'About', href: '/#about', icon: Info },
-  { label: 'Pricing', href: '/pricing', icon: Tag },
+  { label: 'Calendar', href: '/#calendar', icon: Calendar },
+  { label: 'Attendees', href:'#', icon: Users },
+  { label: 'Pricing', href: '/pricing', icon: MessagesSquare },
+  { label: 'Settings', href: '/register', icon: Settings },
 ]
 
 function routeActive(pathname: string, hash: string, href: string): boolean {
@@ -41,22 +45,23 @@ function routeActive(pathname: string, hash: string, href: string): boolean {
 export type SidebarProps = {
   expanded: boolean
   onToggle: () => void
+  style?: React.CSSProperties
 }
 
 const rail = {
   aside:
-    'border-r border-sidebar-border bg-sidebar/80 backdrop-blur-xl transition-[width] duration-300 ease-in-out',
-  headerBorder: 'border-sidebar-border',
-  footerBorder: 'border-sidebar-border',
-  logoText: 'text-sidebar-foreground',
-  muted: 'text-sidebar-foreground/70',
+    'rounded-3xl border border-slate-200 bg-white/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] backdrop-blur-3xl transition-[width,transform] duration-300 ease-in-out dark:border-white/10 dark:bg-slate-900/50 dark:shadow-[0_24px_58px_-34px_rgba(6,8,24,0.85)]',
+  headerBorder: 'border-white/40 dark:border-white/10',
+  footerBorder: 'border-white/40 dark:border-white/10',
+  logoText: 'text-[#1A1A40] dark:text-slate-100',
+  muted: 'text-stone-600 dark:text-slate-300/80',
   navInactive:
-    'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground',
+    'text-stone-700 hover:bg-white/70 hover:text-[#1A1A40] dark:text-slate-300 dark:hover:bg-slate-900/70 dark:hover:text-slate-100',
   navActive:
-    'bg-sidebar-primary/25 text-sidebar-foreground',
-  navActiveCollapsed: 'bg-sidebar-primary/28',
+    'bg-[#4A47F6] text-white shadow-[0_14px_32px_-20px_rgba(74,71,246,0.8)]',
+  navActiveCollapsed: 'bg-[#4A47F6] text-white',
   toggleIdle:
-    'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground',
+    'text-stone-700 hover:bg-white/70 hover:text-[#1A1A40] dark:text-slate-300 dark:hover:bg-slate-900/70 dark:hover:text-slate-100',
   tooltip: 'glass-surface text-foreground',
   tooltipArrow: 'fill-card',
 }
@@ -85,18 +90,18 @@ function NavRow({
       onClick={onClick}
       className={cn(
         'group relative flex min-h-11 w-full items-center rounded-md text-sm font-medium transition-colors duration-200',
-        expanded ? 'justify-start gap-3 px-3 py-3' : 'justify-center px-0 py-3',
+        expanded ? 'justify-start gap-3 rounded-xl px-3 py-3' : 'justify-center rounded-xl px-0 py-3',
         active ? rail.navActive : rail.navInactive,
         active && !expanded && rail.navActiveCollapsed,
         active &&
           !expanded &&
-          'before:pointer-events-none before:absolute before:left-0 before:top-1/2 before:h-8 before:w-0.75 before:-translate-y-1/2 before:rounded-r-sm before:bg-primary',
+          'before:pointer-events-none before:absolute before:left-0 before:top-1/2 before:h-8 before:w-0.75 before:-translate-y-1/2 before:rounded-r-sm before:bg-[#1A1A40] dark:before:bg-white/80',
       )}
     >
       <Icon
         className={cn(
           'h-5 w-5 shrink-0 transition-transform duration-200 ease-out group-hover:scale-105',
-          active ? 'text-primary' : '',
+          active ? 'text-current' : '',
         )}
         strokeWidth={1.5}
         aria-hidden
@@ -113,7 +118,7 @@ function NavRow({
   )
 }
 
-export function Sidebar({ expanded, onToggle }: SidebarProps) {
+export function Sidebar({ expanded, onToggle, style }: SidebarProps) {
   const pathname = usePathname()
   const [hash, setHash] = useState('')
   const { data: session } = useSession()
@@ -160,7 +165,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
       expanded={expanded}
       active={supportActive}
       href="/contact"
-      icon={LifeBuoy}
+      icon={Headset}
       label="Support"
     />
   )
@@ -184,8 +189,9 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
   return (
     <TooltipPrimitive.Provider delayDuration={200} skipDelayDuration={0}>
       <aside
+        style={style}
         className={cn(
-          'fixed left-0 top-0 z-40 flex h-screen w-60 flex-col transition-transform duration-300 ease-in-out md:fixed md:left-0 md:top-0 md:z-20 md:w-auto md:shrink-0 md:transition-[width]',
+          'fixed left-3 top-3 z-40 flex h-[calc(100vh-1.5rem)] w-60 flex-col transition-transform duration-300 ease-in-out md:left-4 md:top-4 md:z-20 md:h-[calc(100vh-2rem)] md:w-auto md:shrink-0 md:transition-[width]',
           rail.aside,
           expanded ? 'translate-x-0 md:w-60' : '-translate-x-full md:translate-x-0 md:w-16',
         )}
@@ -212,7 +218,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
                 )}
               >
                 <PanelLeft
-                  className="h-5 w-5 text-sidebar-foreground"
+                  className="h-5 w-5 text-[#1A1A40] dark:text-slate-100"
                   strokeWidth={1.5}
                   aria-hidden
                 />
@@ -313,7 +319,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
                   onClick={() => signOut()}
                   className={cn(
                     'h-10 w-full justify-center gap-2 rounded-md font-medium',
-                    'text-sidebar-foreground/85 hover:bg-sidebar-accent hover:text-sidebar-foreground',
+                    'text-stone-700 hover:bg-white/70 hover:text-[#1A1A40] dark:text-slate-200 dark:hover:bg-slate-800/70 dark:hover:text-slate-100',
                     !expanded && 'w-10 px-0',
                   )}
                 >
@@ -331,7 +337,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
                 size="sm"
                 onClick={() => signIn('github')}
                 className={cn(
-                  'h-10 w-full gap-2 rounded-md border border-sidebar-border bg-sidebar-accent/80 font-medium text-sidebar-foreground hover:bg-sidebar-accent',
+                  'h-10 w-full gap-2 rounded-md border border-white/45 bg-white/60 font-medium text-[#1A1A40] hover:bg-white/75 dark:border-white/10 dark:bg-slate-900/65 dark:text-slate-100 dark:hover:bg-slate-900/80',
                   !expanded && 'w-10 px-0',
                 )}
               >

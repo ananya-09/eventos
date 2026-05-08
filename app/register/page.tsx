@@ -1,4 +1,4 @@
-import { RegistrationWizard } from '@/components/registration/registration-wizard'
+import { RegistrationWizard } from '@/components/ui/registration-wizard'
 
 export const metadata = {
   title: 'Register – Eventos Workshop',

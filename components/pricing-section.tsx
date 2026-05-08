@@ -79,28 +79,28 @@ export default function PricingSection() {
     <section className="w-full bg-background">
       <div className="mx-auto flex max-w-6xl flex-col items-center px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <div className="text-center pricing-header">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
             Pricing Section
           </p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50 sm:text-4xl">
             Choose your plan
           </h1>
-          <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
+          <p className="mt-3 max-w-2xl text-sm text-neutral-500 dark:text-neutral-400 sm:text-base">
             Add a concise value statement that addresses price sensitivity and showcases plan flexibility while
             keeping it under two lines.
           </p>
         </div>
 
         {/* Billing toggle */}
-        <div className="glass-surface mt-8 inline-flex items-center gap-2 rounded-full px-1 py-1 text-[11px] font-medium text-muted-foreground">
+        <div className="mt-8 inline-flex items-center gap-2 rounded-full border border-border/70 bg-muted px-1 py-1 text-[11px] font-medium text-muted-foreground shadow-sm">
           <button
             type="button"
             onClick={() => setBillingPeriod('monthly')}
             className={[
               'rounded-full px-5 py-2 uppercase tracking-[0.18em] transition-all whitespace-nowrap',
               billingPeriod === 'monthly'
-                ? 'bg-card text-foreground shadow-sm'
-                : 'bg-transparent text-muted-foreground hover:text-foreground',
+                ? 'bg-background text-neutral-900 shadow-sm dark:bg-neutral-50 dark:text-neutral-900'
+                : 'bg-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200',
             ].join(' ')}
           >
             Monthly
@@ -112,8 +112,8 @@ export default function PricingSection() {
             className={[
               'flex items-center justify-center gap-2 rounded-full px-5 py-2 uppercase tracking-[0.18em] transition-all whitespace-nowrap',
               billingPeriod === 'yearly'
-                ? 'bg-card text-foreground shadow-sm'
-                : 'bg-transparent text-muted-foreground hover:text-foreground',
+                ? 'bg-background text-neutral-900 shadow-sm dark:bg-neutral-50 dark:text-neutral-900'
+                : 'bg-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200',
             ].join(' ')}
           >
             <span>Annually</span>
@@ -121,8 +121,8 @@ export default function PricingSection() {
               className={[
                 'rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.18em] transition-colors whitespace-nowrap',
                 billingPeriod === 'yearly'
-                  ? 'bg-primary/15 text-primary'
-                  : 'border border-primary/55 text-primary',
+                  ? 'bg-background/80 text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50'
+                  : 'border border-emerald-500 text-emerald-600 dark:text-emerald-400',
               ].join(' ')}
             >
               Save 20%
@@ -138,12 +138,14 @@ export default function PricingSection() {
         >
           {plans.map((plan, index) => {
             const isSelected = index === selectedIndex
+            const isPopular = plan.highlight
+
             const baseCard =
-              'pricing-card glass-surface flex flex-col rounded-[26px] p-6 transition-transform duration-200 md:p-7 cursor-pointer'
+              'flex flex-col rounded-[26px] border p-6 shadow-sm transition-transform duration-200 md:p-7 cursor-pointer'
 
             const colorClasses = isSelected
-              ? 'border-primary/65 bg-primary/12 text-foreground scale-[1.01]'
-              : 'text-foreground'
+              ? 'border-transparent bg-black text-white shadow-md shadow-black/30 scale-[1.01] dark:bg-neutral-100 dark:text-neutral-900 dark:shadow-neutral-900/20'
+              : 'border-neutral-200 bg-white text-neutral-900 shadow-sm dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-50'
 
             return (
               <div
@@ -171,8 +173,8 @@ export default function PricingSection() {
                   className={[
                     'mt-6 w-full justify-center rounded-full text-sm font-medium',
                     isSelected
-                      ? 'bg-primary text-primary-foreground hover:bg-primary/90 border-transparent'
-                      : 'bg-card text-foreground hover:bg-muted border-border/60',
+                      ? 'bg-white text-black hover:bg-neutral-100 dark:bg-black dark:text-white dark:hover:bg-neutral-900 border-transparent'
+                      : 'bg-black text-white hover:bg-neutral-900 dark:bg-neutral-100 dark:text-black dark:hover:bg-neutral-200 border-transparent',
                   ].join(' ')}
                 >
                   Purchase plan
