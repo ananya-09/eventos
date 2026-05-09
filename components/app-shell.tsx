@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { PanelLeft } from 'lucide-react'
 import Footer from '@/components/footer'
 import GetStartedSection from '@/components/get-started-section'
@@ -13,14 +14,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [sidebarExpanded, setSidebarExpanded] = useState(false)
   const [sidebarOpacity, setSidebarOpacity] = useState(1)
   const footerRef = useRef<HTMLDivElement>(null)
+  const pathname = usePathname()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         let ratio = entry.intersectionRatio
         if (ratio > 0.4) ratio = 0.4
-        
-        const opacity = 1 - (ratio / 0.4)
+        const opacity = 1 - ratio / 0.4
         setSidebarOpacity(opacity)
       },
       {
@@ -35,6 +36,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
     return () => observer.disconnect()
   }, [])
+
+  if (pathname === '/') {
+    return <>{children}</>
+  }
 
   return (
     <div className="flex flex-col min-h-screen overflow-x-hidden">
@@ -71,7 +76,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <SaaSGridBackground
         className={cn(
           'flex-1 min-w-0 transition-[padding-left] duration-300 ease-in-out',
-          sidebarExpanded ? 'md:pl-[17.5rem]' : 'md:pl-[6.5rem]',
+          sidebarExpanded ? 'md:pl-70' : 'md:pl-26',
         )}
       >
         <div className="flex flex-col h-full px-4 pt-16 md:pr-6 md:pt-4 pb-12">

@@ -50,18 +50,17 @@ export type SidebarProps = {
 
 const rail = {
   aside:
-    'rounded-3xl border border-slate-200 bg-white/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] backdrop-blur-3xl transition-[width,transform] duration-300 ease-in-out dark:border-white/10 dark:bg-slate-900/50 dark:shadow-[0_24px_58px_-34px_rgba(6,8,24,0.85)]',
-  headerBorder: 'border-white/40 dark:border-white/10',
-  footerBorder: 'border-white/40 dark:border-white/10',
-  logoText: 'text-[#1A1A40] dark:text-slate-100',
-  muted: 'text-stone-600 dark:text-slate-300/80',
+    'rounded-3xl border border-sidebar-border bg-sidebar/85 shadow-[var(--shadow-elegant)] backdrop-blur-3xl transition-[width,transform] duration-300 ease-in-out',
+  headerBorder: 'border-sidebar-border',
+  footerBorder: 'border-sidebar-border',
+  logoText: 'text-foreground',
+  muted: 'text-muted-foreground',
   navInactive:
-    'text-stone-700 hover:bg-white/70 hover:text-[#1A1A40] dark:text-slate-300 dark:hover:bg-slate-900/70 dark:hover:text-slate-100',
-  navActive:
-    'bg-[#4A47F6] text-white shadow-[0_14px_32px_-20px_rgba(74,71,246,0.8)]',
-  navActiveCollapsed: 'bg-[#4A47F6] text-white',
+    'text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+  navActive: 'bg-primary text-primary-foreground shadow-[var(--shadow-glow)]',
+  navActiveCollapsed: 'bg-primary text-primary-foreground',
   toggleIdle:
-    'text-stone-700 hover:bg-white/70 hover:text-[#1A1A40] dark:text-slate-300 dark:hover:bg-slate-900/70 dark:hover:text-slate-100',
+    'text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
   tooltip: 'glass-surface text-foreground',
   tooltipArrow: 'fill-card',
 }
@@ -95,7 +94,7 @@ function NavRow({
         active && !expanded && rail.navActiveCollapsed,
         active &&
           !expanded &&
-          'before:pointer-events-none before:absolute before:left-0 before:top-1/2 before:h-8 before:w-0.75 before:-translate-y-1/2 before:rounded-r-sm before:bg-[#1A1A40] dark:before:bg-white/80',
+          'before:pointer-events-none before:absolute before:left-0 before:top-1/2 before:h-8 before:w-0.75 before:-translate-y-1/2 before:rounded-r-sm before:bg-accent',
       )}
     >
       <Icon
@@ -217,11 +216,7 @@ export function Sidebar({ expanded, onToggle, style }: SidebarProps) {
                   rail.toggleIdle,
                 )}
               >
-                <PanelLeft
-                  className="h-5 w-5 text-[#1A1A40] dark:text-slate-100"
-                  strokeWidth={1.5}
-                  aria-hidden
-                />
+                <PanelLeft className="h-5 w-5 text-foreground" strokeWidth={1.5} aria-hidden />
                 <span className="sr-only">Expand menu</span>
               </button>,
             )}
@@ -319,7 +314,7 @@ export function Sidebar({ expanded, onToggle, style }: SidebarProps) {
                   onClick={() => signOut()}
                   className={cn(
                     'h-10 w-full justify-center gap-2 rounded-md font-medium',
-                    'text-stone-700 hover:bg-white/70 hover:text-[#1A1A40] dark:text-slate-200 dark:hover:bg-slate-800/70 dark:hover:text-slate-100',
+                    'text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
                     !expanded && 'w-10 px-0',
                   )}
                 >
@@ -337,7 +332,7 @@ export function Sidebar({ expanded, onToggle, style }: SidebarProps) {
                 size="sm"
                 onClick={() => signIn('github')}
                 className={cn(
-                  'h-10 w-full gap-2 rounded-md border border-white/45 bg-white/60 font-medium text-[#1A1A40] hover:bg-white/75 dark:border-white/10 dark:bg-slate-900/65 dark:text-slate-100 dark:hover:bg-slate-900/80',
+                  'h-10 w-full gap-2 rounded-md border border-border bg-background/70 font-medium text-foreground hover:bg-background/90',
                   !expanded && 'w-10 px-0',
                 )}
               >

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
 import AppShell from '@/components/app-shell'
-import LoaderWrapper from '@/components/loader-wrapper'
+import LoaderWrapper from '@/components/ui/loader-wrapper'
 import { ThemeProvider } from '@/components/theme-provider'
 import AuthSessionProvider from '@/components/session-provider'
 import { Toaster } from '@/components/ui/sonner'
@@ -10,7 +10,6 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'EventHub - Modern Event Dashboard',
   description: 'Join EventHub for an unforgettable event experience with workshops, speakers, and networking opportunities.',
-  generator: 'v0.app',
   icons: {
     icon: [
       {
@@ -41,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body className={`${fontSans.className} font-sans antialiased`}>
         <ThemeProvider>
           <AuthSessionProvider>

@@ -91,7 +91,7 @@ export default function SaaSGridBackground({
     const palette = [
       { r: 59, g: 130, b: 246 }, // blue
       { r: 139, g: 92, b: 246 }, // purple
-      { r: 99, g: 102, b: 241 }, // indigo
+      { r: 74, g: 116, b: 167 }, // primary blue
       { r: 255, g: 255, b: 255 }, // white glow
     ]
 

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 
 export default function GetStartedSection() {
   return (
-    <section className="get-started-section mt-20 px-4 py-14 text-center sm:px-6 md:py-16 lg:px-8">
+    <section className="get-started-section mt-20 rounded-3xl border border-border bg-card/70 px-4 py-14 text-center shadow-[var(--shadow-soft)] backdrop-blur-xl sm:px-6 md:py-16 lg:px-8">
       <h3 className="text-3xl font-bold tracking-tight text-foreground">Ready to level up your business?</h3>
       <p className="mt-3 text-base text-muted-foreground">Start your 30-day free trial. Cancel anytime.</p>
 
@@ -12,13 +12,13 @@ export default function GetStartedSection() {
         <Button
           type="button"
           variant="outline"
-          className="h-10 rounded-full border-border bg-white px-5 text-sm font-semibold hover:bg-muted dark:bg-card"
+          className="h-10 rounded-full border-border bg-background/50 px-5 text-sm font-semibold text-foreground hover:bg-muted"
         >
           View demo
         </Button>
         <Button
           type="button"
-          className="h-10 rounded-full bg-zinc-900 px-5 text-sm font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+          className="h-10 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
         >
           Get started
         </Button>
