@@ -1,15 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { logoLinkedin, logoInstagram } from 'ionicons/icons'
-
-const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 24.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-  </svg>
-)
+import { ArrowRight, Bird, Github, Instagram, Linkedin, X } from 'lucide-react'
 
 const Logo = () => (
   <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="square">
@@ -20,27 +12,6 @@ const Logo = () => (
 )
 
 export default function Footer() {
-  const [iconsReady, setIconsReady] = useState(false)
-
-  useEffect(() => {
-    let cancelled = false
-    void Promise.all([
-      import('ionicons/components/ion-icon.js'),
-      import('ionicons'),
-    ]).then(([{ defineCustomElement }, { addIcons }]) => {
-      if (cancelled) return
-      defineCustomElement()
-      addIcons({
-        logoLinkedin,
-        logoInstagram,
-      })
-      setIconsReady(true)
-    })
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
   return (
     <footer className="mt-auto w-full border-t border-border bg-card/70 px-5 py-8 text-card-foreground backdrop-blur-xl md:px-8">
       <div className="max-w-300 mx-auto flex flex-col">
@@ -114,29 +85,29 @@ export default function Footer() {
         <div className="mt-12 flex flex-col lg:flex-row justify-between items-center gap-6">
           <div className="flex flex-wrap gap-1.5">
             <Link href="#" className="bg-background/40 px-3.5 py-3 flex items-center justify-center transition-colors hover:bg-background/60">
-              {iconsReady ? (
-                <ion-icon name="logo-linkedin" className="text-muted-foreground" style={{ fontSize: '1rem' }} />
-              ) : (
-                <span className="w-4 h-4" />
-              )}
+              <X className="w-4 h-4 text-muted-foreground" />
             </Link>
             <Link href="#" className="bg-background/40 px-3.5 py-3 flex items-center justify-center transition-colors hover:bg-background/60">
-              {iconsReady ? (
-                <ion-icon name="logo-instagram" className="text-muted-foreground" style={{ fontSize: '1rem' }} />
-              ) : (
-                <span className="w-4 h-4" />
-              )}
+              <Bird className="w-4 h-4 text-muted-foreground" />
             </Link>
-            <Link href="#" className="bg-background/40 px-4 py-3 text-xs text-muted-foreground transition-colors hover:bg-background/60 hover:text-foreground">
-              Privacy Policy
+            <Link href="#" className="bg-background/40 px-3.5 py-3 flex items-center justify-center transition-colors hover:bg-background/60">
+              <Linkedin className="w-4 h-4 text-muted-foreground" />
             </Link>
-            <Link href="#" className="bg-background/40 px-4 py-3 text-xs text-muted-foreground transition-colors hover:bg-background/60 hover:text-foreground">
-              Terms of Service
+            <Link href="#" className="bg-background/40 px-3.5 py-3 flex items-center justify-center transition-colors hover:bg-background/60">
+              <Instagram className="w-4 h-4 text-muted-foreground" />
             </Link>
           </div>
 
-          <div className="bg-background/40 px-5 py-3 text-[10px] text-muted-foreground">
-            © 2026 EDUQUE. All Rights Reserved.
+          <div className="bg-background/40 px-5 py-3 text-[10px] text-muted-foreground flex flex-col items-center lg:items-end gap-2">
+            <div>© 2026 EDUQUE. All Rights Reserved.</div>
+            <div className="flex flex-wrap justify-center lg:justify-end gap-1.5">
+              <Link href="#" className="px-3 py-2 transition-colors hover:text-foreground">
+                Privacy Policy
+              </Link>
+              <Link href="#" className="px-3 py-2 transition-colors hover:text-foreground">
+                Terms of Service
+              </Link>
+            </div>
           </div>
         </div>
       </div>
