@@ -91,11 +91,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         )}
       </SaaSGridBackground>
 
-      {!isHome && (
-        <div ref={footerRef} className="w-full">
-          <Footer />
-        </div>
-      )}
+      <div ref={footerRef} className="w-full">
+        <Footer />
+      </div>
     </div>
   )
 }
