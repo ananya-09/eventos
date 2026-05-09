@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { Sparkles, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import SaaSGridBackground from '@/components/saas-grid-background'
 
 const navLinks = [
   { label: 'Features', href: '#features' },
@@ -12,9 +11,8 @@ const navLinks = [
 
 export default function Home() {
   return (
-    <SaaSGridBackground className="min-h-screen bg-transparent">
-      <section className="min-h-screen">
-        <div className="relative mx-auto flex min-h-screen w-full flex-col px-5 pb-16 pt-6 sm:px-8 lg:px-10" style={{ maxWidth: 1600 }}>
+    <section className="min-h-screen">
+      <div className="relative mx-auto flex min-h-screen w-full flex-col px-5 pb-16 pt-6 sm:px-8 lg:px-10" style={{ maxWidth: 1600 }}>
         <header className="flex items-center justify-between gap-6">
           <Link href="/" className="flex items-center gap-3 text-foreground">
             <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground" style={{ boxShadow: 'var(--shadow-glow)' }}>
@@ -85,7 +83,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      </section>
-    </SaaSGridBackground>
+    </section>
   )
 }
