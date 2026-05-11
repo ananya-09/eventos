@@ -106,7 +106,7 @@ export default function Contact() {
                       href="mailto:shauryasrivastav07@gmail.com"
                       className="block text-sm text-foreground underline-offset-2 hover:underline"
                     >
-                      shauryasrivastav07@gmail.com
+                      eventosofficials@gmail.com
                     </a>
                     <p className="text-xs text-muted-foreground">We&apos;ll respond within 24 hours</p>
                   </div>
@@ -125,7 +125,7 @@ export default function Contact() {
                       href="tel:+917897426629"
                       className="block text-sm text-foreground underline-offset-2 hover:underline"
                     >
-                      +91 78974 26629
+                      {/* +91 XXXXX XXXXX */}
                     </a>
                     <p className="text-xs text-muted-foreground">Mon-Fri, 9AM-6PM EST</p>
                   </div>

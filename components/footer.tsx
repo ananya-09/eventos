@@ -70,7 +70,7 @@ export default function Footer() {
                 </button>
               </div>
               <p className="mt-4 pr-4 text-[10px] leading-relaxed text-muted-foreground">
-                By providing this information, you agree to be kept informed about EDUQUE products and services.
+                By providing this information, you agree to be kept informed about EVENTOS products and services.
               </p>
               <div className="mt-auto pt-10">
                 <h3 className="text-lg md:text-[1.1rem] font-medium leading-snug">
@@ -98,13 +98,15 @@ export default function Footer() {
             </Link>
           </div>
 
-          <div className="bg-background/40 px-5 py-3 text-[10px] text-muted-foreground flex flex-col items-center lg:items-end gap-2">
-            <div>© 2026 EDUQUE. All Rights Reserved.</div>
+          <div className="px-0 py-2 text-[10px] text-muted-foreground flex flex-row items-center gap-2">
+            <div className="bg-background/40 px-5 py-3 transition-colors hover:text-foreground" >© 2026 EVENTOS. All Rights Reserved.</div>
             <div className="flex flex-wrap justify-center lg:justify-end gap-1.5">
-              <Link href="#" className="px-3 py-2 transition-colors hover:text-foreground">
+              <Link href="#" className="bg-background/40 px-5 py-3 transition-colors hover:text-foreground">
                 Privacy Policy
               </Link>
-              <Link href="#" className="px-3 py-2 transition-colors hover:text-foreground">
+            </div>
+            <div>
+              <Link href="#" className="bg-background/40 px-5 py-3 transition-colors hover:text-foreground">
                 Terms of Service
               </Link>
             </div>

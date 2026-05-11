@@ -8,8 +8,8 @@ import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'EventHub - Modern Event Dashboard',
-  description: 'Join EventHub for an unforgettable event experience with workshops, speakers, and networking opportunities.',
+  title: 'Eventos - Modern Event Dashboard',
+  description: 'Join Eventos for an unforgettable event experience with workshops, speakers, and networking opportunities.',
   icons: {
     icon: [
       {
