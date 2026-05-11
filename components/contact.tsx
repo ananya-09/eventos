@@ -1,47 +1,13 @@
 'use client'
 
-import { useEffect, useState, type FormEvent } from 'react'
-import {
-  mailOutline,
-  callOutline,
-  locationOutline,
-  paperPlaneOutline,
-  logoInstagram,
-  logoLinkedin,
-  logoGithub,
-} from 'ionicons/icons'
+import { type FormEvent } from 'react'
+import { Github, Instagram, Linkedin, Mail, MapPin, Phone, Send } from 'lucide-react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
 
 export default function Contact() {
-  const [iconsReady, setIconsReady] = useState(false)
-
-  useEffect(() => {
-    let cancelled = false
-    void Promise.all([
-      import('ionicons/components/ion-icon.js'),
-      import('ionicons'),
-    ]).then(([{ defineCustomElement }, { addIcons }]) => {
-      if (cancelled) return
-      defineCustomElement()
-      addIcons({
-        mailOutline,
-        callOutline,
-        locationOutline,
-        paperPlaneOutline,
-        logoInstagram,
-        logoLinkedin,
-        logoGithub,
-      })
-      setIconsReady(true)
-    })
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     toast.success('Message sent', {
@@ -113,13 +79,7 @@ export default function Contact() {
                   type="submit"
                   className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
                 >
-                  {iconsReady ? (
-                    <ion-icon
-                      name="paper-plane-outline"
-                      className="text-lg text-primary-foreground"
-                      aria-hidden
-                    />
-                  ) : null}
+                  <Send className="text-lg text-primary-foreground" aria-hidden />
                   Send Message
                 </button>
               </form>
@@ -138,15 +98,7 @@ export default function Contact() {
                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-muted text-foreground dark:bg-secondary"
                     aria-hidden
                   >
-                    {iconsReady ? (
-                      <ion-icon
-                        name="mail-outline"
-                        className="text-foreground"
-                        style={{ fontSize: '1.375rem' }}
-                      />
-                    ) : (
-                      <span className="h-5 w-5 rounded-sm bg-muted-foreground/20" />
-                    )}
+                    <Mail className="text-foreground" style={{ fontSize: '1.375rem' }} />
                   </div>
                   <div className="min-w-0 space-y-1">
                     <p className="text-sm font-semibold text-foreground">Email</p>
@@ -154,7 +106,7 @@ export default function Contact() {
                       href="mailto:shauryasrivastav07@gmail.com"
                       className="block text-sm text-foreground underline-offset-2 hover:underline"
                     >
-                      shauryasrivastav07@gmail.com
+                      eventosofficials@gmail.com
                     </a>
                     <p className="text-xs text-muted-foreground">We&apos;ll respond within 24 hours</p>
                   </div>
@@ -165,15 +117,7 @@ export default function Contact() {
                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-muted text-foreground dark:bg-secondary"
                     aria-hidden
                   >
-                    {iconsReady ? (
-                      <ion-icon
-                        name="call-outline"
-                        className="text-foreground"
-                        style={{ fontSize: '1.375rem' }}
-                      />
-                    ) : (
-                      <span className="h-5 w-5 rounded-sm bg-muted-foreground/20" />
-                    )}
+                    <Phone className="text-foreground" style={{ fontSize: '1.375rem' }} />
                   </div>
                   <div className="min-w-0 space-y-1">
                     <p className="text-sm font-semibold text-foreground">Phone</p>
@@ -181,7 +125,7 @@ export default function Contact() {
                       href="tel:+917897426629"
                       className="block text-sm text-foreground underline-offset-2 hover:underline"
                     >
-                      +91 78974 26629
+                      {/* +91 XXXXX XXXXX */}
                     </a>
                     <p className="text-xs text-muted-foreground">Mon-Fri, 9AM-6PM EST</p>
                   </div>
@@ -192,15 +136,7 @@ export default function Contact() {
                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-muted text-foreground dark:bg-secondary"
                     aria-hidden
                   >
-                    {iconsReady ? (
-                      <ion-icon
-                        name="location-outline"
-                        className="text-foreground"
-                        style={{ fontSize: '1.375rem' }}
-                      />
-                    ) : (
-                      <span className="h-5 w-5 rounded-sm bg-muted-foreground/20" />
-                    )}
+                    <MapPin className="text-foreground" style={{ fontSize: '1.375rem' }} />
                   </div>
                   <div className="min-w-0 space-y-1">
                     <p className="text-sm font-semibold text-foreground">Office</p>
@@ -217,27 +153,19 @@ export default function Contact() {
                 <p className="text-sm font-semibold text-foreground">Follow Us</p>
                 <div className="mt-4 flex gap-3">
                   {[
-                    { icon: 'logo-instagram', label: 'Instagram', href: 'https://instagram.com' },
-                    { icon: 'logo-linkedin', label: 'LinkedIn', href: 'https://linkedin.com' },
-                    { icon: 'logo-github', label: 'GitHub', href: 'https://github.com' },
-                  ].map(({ icon, label, href }) => (
+                    { icon: Instagram, label: 'Instagram', href: 'https://instagram.com' },
+                    { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com' },
+                    { icon: Github, label: 'GitHub', href: 'https://github.com' },
+                  ].map(({ icon: Icon, label, href }) => (
                     <a
-                      key={icon}
+                      key={label}
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={label}
                       className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:text-foreground dark:bg-secondary dark:hover:text-foreground"
                     >
-                      {iconsReady ? (
-                        <ion-icon
-                          name={icon}
-                          className="text-current"
-                          style={{ fontSize: '1.25rem' }}
-                        />
-                      ) : (
-                        <span className="h-4 w-4 rounded-sm bg-muted-foreground/30" />
-                      )}
+                      <Icon className="text-current" style={{ fontSize: '1.25rem' }} />
                     </a>
                   ))}
                 </div>

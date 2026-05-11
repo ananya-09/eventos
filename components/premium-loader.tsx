@@ -74,7 +74,7 @@ export default function PremiumLoader({ onComplete }: PremiumLoaderProps) {
       <div className="mb-16 text-center">
         <h1 className="text-7xl md:text-8xl font-serif font-bold tracking-tighter">
           <span
-            className="inline-block bg-linear-to-r from-white via-indigo-400 to-violet-300 bg-clip-text text-transparent"
+            className="inline-block bg-linear-to-r from-white via-primary to-primary-glow bg-clip-text text-transparent"
             style={{
               backgroundSize: '200% 100%',
               animation: 'shimmer 3s linear infinite',
@@ -95,11 +95,11 @@ export default function PremiumLoader({ onComplete }: PremiumLoaderProps) {
       {/* Thin Animated Progress Bar */}
       <div className="w-64 h-0.5 bg-violet-950/60 rounded-full overflow-hidden">
         <div
-          className="h-full bg-linear-to-r from-transparent via-indigo-300 to-violet-300"
+          className="h-full bg-linear-to-r from-transparent via-primary to-primary-glow"
           style={{
             width: `${progress}%`,
             transition: 'width 0.28s cubic-bezier(0.4, 0, 0.2, 1)',
-            boxShadow: '0 0 20px rgba(99, 102, 241, 0.55)',
+            boxShadow: '0 0 20px rgba(74, 116, 167, 0.55)',
           }}
         />
       </div>

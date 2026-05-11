@@ -1,15 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { logoLinkedin, logoInstagram } from 'ionicons/icons'
-
-const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 24.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-  </svg>
-)
+import { ArrowRight, Bird, Github, Instagram, Linkedin, X } from 'lucide-react'
 
 const Logo = () => (
   <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="square">
@@ -20,34 +12,13 @@ const Logo = () => (
 )
 
 export default function Footer() {
-  const [iconsReady, setIconsReady] = useState(false)
-
-  useEffect(() => {
-    let cancelled = false
-    void Promise.all([
-      import('ionicons/components/ion-icon.js'),
-      import('ionicons'),
-    ]).then(([{ defineCustomElement }, { addIcons }]) => {
-      if (cancelled) return
-      defineCustomElement()
-      addIcons({
-        logoLinkedin,
-        logoInstagram,
-      })
-      setIconsReady(true)
-    })
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
   return (
-    <footer className="bg-[#0A0A0A] text-white py-8 px-5 md:px-8 w-full mt-auto border-t border-white/5">
-      <div className="max-w-[1200px] mx-auto flex flex-col">
+    <footer className="mt-auto w-full border-t border-border bg-card/70 px-5 py-8 text-card-foreground backdrop-blur-xl md:px-8">
+      <div className="max-w-300 mx-auto flex flex-col">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 flex-1">
           {/* Left Column - 5 spans */}
           <div className="lg:col-span-5 flex flex-col justify-between">
-            <div className="text-white">
+            <div className="text-foreground">
               <Logo />
             </div>
             <div className="mt-10 lg:mt-24 mb-6">
@@ -71,35 +42,35 @@ export default function Footer() {
                 <Link 
                   href="#" 
                   key={item} 
-                  className="bg-[#141414] px-4 py-3 text-xs font-medium text-gray-300 hover:text-white hover:bg-[#1a1a1a] transition-colors"
+                  className="bg-background/40 px-4 py-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-background/60 hover:text-foreground"
                 >
                   {item}
                 </Link>
               ))}
             </div>
-            <button className="mt-4 w-full flex items-center justify-between bg-white text-black/60 font-semibold text-xs overflow-hidden pl-4 hover:bg-gray-100 transition-colors">
+            <button className="mt-4 flex w-full items-center justify-between overflow-hidden bg-accent text-xs font-semibold text-accent-foreground transition-colors hover:bg-accent/90 pl-4">
               BOOK A DEMO
-              <div className="bg-[#4A47F6] px-4 py-3">
-                <ArrowRight className="w-4 h-4 text-white" />
+              <div className="bg-primary px-4 py-3">
+                <ArrowRight className="w-4 h-4 text-primary-foreground" />
               </div>
             </button>
           </div>
 
           {/* Right Column - 4 spans */}
           <div className="lg:col-span-4 flex flex-col">
-            <div className="bg-[#141414] p-6 flex-1 flex flex-col mt-2">
-              <div className="flex bg-[#1d1d1d] overflow-hidden">
+            <div className="bg-background/40 p-6 flex-1 flex flex-col mt-2 rounded-2xl border border-border/60">
+              <div className="flex overflow-hidden rounded-xl border border-border bg-background/50">
                 <input 
                   type="email" 
                   placeholder="Your work email" 
-                  className="bg-transparent text-white px-4 py-3 flex-1 text-xs outline-none placeholder:text-gray-500"
+                  className="flex-1 bg-transparent px-4 py-3 text-xs text-foreground outline-none placeholder:text-muted-foreground"
                 />
-                <button className="bg-[#4A47F6] px-4 flex items-center justify-center hover:bg-[#3A37D6] transition-colors">
-                  <ArrowRight className="w-4 h-4 text-white" />
+                <button className="bg-primary px-4 flex items-center justify-center transition-colors hover:bg-primary/90">
+                  <ArrowRight className="w-4 h-4 text-primary-foreground" />
                 </button>
               </div>
-              <p className="mt-4 text-[10px] text-gray-500 leading-relaxed pr-4">
-                By providing this information, you agree to be kept informed about EDUQUE products and services.
+              <p className="mt-4 pr-4 text-[10px] leading-relaxed text-muted-foreground">
+                By providing this information, you agree to be kept informed about EVENTOS products and services.
               </p>
               <div className="mt-auto pt-10">
                 <h3 className="text-lg md:text-[1.1rem] font-medium leading-snug">
@@ -113,30 +84,32 @@ export default function Footer() {
         {/* Bottom Row */}
         <div className="mt-12 flex flex-col lg:flex-row justify-between items-center gap-6">
           <div className="flex flex-wrap gap-1.5">
-            <Link href="#" className="bg-[#141414] px-3.5 py-3 flex items-center justify-center hover:bg-[#1a1a1a] transition-colors">
-              {iconsReady ? (
-                <ion-icon name="logo-linkedin" className="text-gray-400" style={{ fontSize: '1rem' }} />
-              ) : (
-                <span className="w-4 h-4" />
-              )}
+            <Link href="#" className="bg-background/40 px-3.5 py-3 flex items-center justify-center transition-colors hover:bg-background/60">
+              <X className="w-4 h-4 text-muted-foreground" />
             </Link>
-            <Link href="#" className="bg-[#141414] px-3.5 py-3 flex items-center justify-center hover:bg-[#1a1a1a] transition-colors">
-              {iconsReady ? (
-                <ion-icon name="logo-instagram" className="text-gray-400" style={{ fontSize: '1rem' }} />
-              ) : (
-                <span className="w-4 h-4" />
-              )}
+            <Link href="#" className="bg-background/40 px-3.5 py-3 flex items-center justify-center transition-colors hover:bg-background/60">
+              <Bird className="w-4 h-4 text-muted-foreground" />
             </Link>
-            <Link href="#" className="bg-[#141414] px-4 py-3 text-xs text-gray-400 hover:text-white hover:bg-[#1a1a1a] transition-colors">
-              Privacy Policy
+            <Link href="#" className="bg-background/40 px-3.5 py-3 flex items-center justify-center transition-colors hover:bg-background/60">
+              <Linkedin className="w-4 h-4 text-muted-foreground" />
             </Link>
-            <Link href="#" className="bg-[#141414] px-4 py-3 text-xs text-gray-400 hover:text-white hover:bg-[#1a1a1a] transition-colors">
-              Terms of Service
+            <Link href="#" className="bg-background/40 px-3.5 py-3 flex items-center justify-center transition-colors hover:bg-background/60">
+              <Instagram className="w-4 h-4 text-muted-foreground" />
             </Link>
           </div>
 
-          <div className="bg-[#141414] px-5 py-3 text-[10px] text-gray-500">
-            © 2026 EDUQUE. All Rights Reserved.
+          <div className="px-0 py-2 text-[10px] text-muted-foreground flex flex-row items-center gap-2">
+            <div className="bg-background/40 px-5 py-3 transition-colors hover:text-foreground" >© 2026 EVENTOS. All Rights Reserved.</div>
+            <div className="flex flex-wrap justify-center lg:justify-end gap-1.5">
+              <Link href="#" className="bg-background/40 px-5 py-3 transition-colors hover:text-foreground">
+                Privacy Policy
+              </Link>
+            </div>
+            <div>
+              <Link href="#" className="bg-background/40 px-5 py-3 transition-colors hover:text-foreground">
+                Terms of Service
+              </Link>
+            </div>
           </div>
         </div>
       </div>
