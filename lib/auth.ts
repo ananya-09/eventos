@@ -1,4 +1,4 @@
-import type { NextAuthOptions, Provider } from 'next-auth'
+import type { NextAuthOptions } from 'next-auth'
 import GitHubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
 
@@ -9,7 +9,7 @@ if (!process.env.GITHUB_CLIENT_SECRET) {
   throw new Error('Missing required environment variable: GITHUB_CLIENT_SECRET')
 }
 
-const providers: Provider[] = [
+const providers: any[] = [
   GitHubProvider({
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
