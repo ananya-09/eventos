@@ -55,7 +55,7 @@ export function CalendarGrid({ events, currentWeekStart, onEventClick, onEventEd
       }, 100)
       return () => clearTimeout(timer)
     }
-  }, [])
+  }, [currentTimeTop, isCurrentTimeVisible])
 
   return (
     <div className="flex flex-col h-full w-full border rounded-xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 overflow-hidden relative">
