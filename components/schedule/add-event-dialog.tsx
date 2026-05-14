@@ -53,7 +53,7 @@ export function AddEventDialog({ open, onOpenChange, onAddEvent, currentDate }: 
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-950"
+              className="flex h-10 w-full rounded-md border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="e.g. Math Exam"
               required
             />
@@ -65,11 +65,11 @@ export function AddEventDialog({ open, onOpenChange, onAddEvent, currentDate }: 
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-950"
+              className="flex h-10 w-full rounded-md border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               required
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="grid gap-2">
               <label htmlFor="startTime" className="text-sm font-medium">Start Time</label>
               <input
@@ -77,7 +77,7 @@ export function AddEventDialog({ open, onOpenChange, onAddEvent, currentDate }: 
                 type="time"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-950"
+                className="flex h-10 w-full rounded-md border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                 required
               />
             </div>
@@ -88,7 +88,7 @@ export function AddEventDialog({ open, onOpenChange, onAddEvent, currentDate }: 
                 type="time"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
-                className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-950"
+                className="flex h-10 w-full rounded-md border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                 required
               />
             </div>
@@ -99,7 +99,7 @@ export function AddEventDialog({ open, onOpenChange, onAddEvent, currentDate }: 
               id="theme"
               value={theme}
               onChange={(e) => setTheme(e.target.value as EventTheme)}
-              className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-950"
+              className="flex h-10 w-full rounded-md border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="blue">Blue</option>
               <option value="purple">Purple</option>
@@ -114,13 +114,13 @@ export function AddEventDialog({ open, onOpenChange, onAddEvent, currentDate }: 
               id="status"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-800 dark:bg-slate-950"
+              className="flex h-10 w-full rounded-md border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="e.g. Confirmed"
             />
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button type="submit" className="bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black">Save Event</Button>
+            <Button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/90">Save Event</Button>
           </DialogFooter>
         </form>
       </DialogContent>

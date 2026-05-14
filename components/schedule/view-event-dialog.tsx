@@ -32,19 +32,19 @@ export function ViewEventDialog({ event, open, onOpenChange, onDeleteEvent }: Vi
           </DialogDescription>
         </DialogHeader>
         
-        <div className="grid gap-4 py-4 text-sm text-slate-700 dark:text-slate-300">
+        <div className="grid gap-4 py-4 text-sm text-foreground">
           <div className="flex items-center gap-3">
-            <Calendar className="h-4 w-4 text-slate-400" />
-            <span>{displayDate}</span>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <span>{event.date}</span>
           </div>
-          <div className="flex items-center gap-3">
-            <Clock className="h-4 w-4 text-slate-400" />
+          <div className="flex items-center gap-2">
+            <Clock className="h-4 w-4 text-muted-foreground" />
             <span>{event.startTime} - {event.endTime}</span>
           </div>
           {event.status && (
             <div className="flex items-center gap-3">
-              <Tag className="h-4 w-4 text-slate-400" />
-              <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full text-xs font-medium">
+              <Tag className="h-4 w-4 text-muted-foreground" />
+              <span className="bg-secondary px-2 py-0.5 rounded-full text-xs font-medium">
                 {event.status}
               </span>
             </div>
@@ -55,7 +55,7 @@ export function ViewEventDialog({ event, open, onOpenChange, onDeleteEvent }: Vi
            <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30" onClick={() => { onDeleteEvent(event.id); onOpenChange(false); }}>
               <Trash className="h-4 w-4" />
            </Button>
-           <Button className="bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black" onClick={() => onOpenChange(false)}>
+           <Button className="bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => onOpenChange(false)}>
               Close
            </Button>
         </DialogFooter>

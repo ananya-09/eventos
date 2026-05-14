@@ -7,8 +7,8 @@ export const metadata = {
 
 export default function SchedulePage() {
   return (
-    <div className="flex h-[calc(100vh-2rem)] w-full flex-col bg-[#F3F4F6] dark:bg-slate-950">
-      <div className="flex-1 overflow-hidden rounded-3xl bg-white p-6 shadow-sm dark:bg-slate-900 m-2 md:m-4 flex flex-col">
+    <div className="flex h-[calc(100vh-2rem)] w-full flex-col bg-background">
+      <div className="flex-1 overflow-hidden rounded-3xl bg-card p-6 shadow-sm m-2 md:m-4 flex flex-col">
         <WeeklyCalendar />
       </div>
     </div>

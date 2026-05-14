@@ -58,18 +58,18 @@ export function CalendarGrid({ events, currentWeekStart, onEventClick, onEventEd
   }, [currentTimeTop, isCurrentTimeVisible])
 
   return (
-    <div className="flex flex-col h-full w-full border rounded-xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 overflow-hidden relative">
+    <div className="flex flex-col h-full w-full border-border rounded-xl bg-card overflow-hidden relative">
       <div className="flex flex-col h-full min-w-[800px] overflow-x-auto">
         {/* Header Row */}
-        <div className="flex shrink-0 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 z-30 shadow-sm">
-          <div className="w-16 shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900" />
+        <div className="flex shrink-0 border-b border-border bg-card z-30 shadow-sm">
+          <div className="w-16 shrink-0 border-r border-border bg-card" />
         {days.map((day, i) => (
           <div
             key={day.dateString}
             className={cn(
               "flex-1 py-3 text-center text-xs font-medium border-r border-slate-200 dark:border-slate-800 last:border-r-0",
               day.isToday 
-                ? "bg-black text-white dark:bg-white dark:text-black rounded-t-md mx-0.5 mt-0.5" 
+                ? "bg-primary text-primary-foreground rounded-t-md mx-0.5 mt-0.5" 
                 : "text-slate-500 dark:text-slate-400"
             )}
           >
@@ -81,7 +81,7 @@ export function CalendarGrid({ events, currentWeekStart, onEventClick, onEventEd
       {/* Grid Body */}
       <div className="relative flex flex-1 overflow-y-auto" ref={scrollRef}>
         {/* Time Labels */}
-        <div className="w-16 shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 z-20">
+        <div className="w-16 shrink-0 border-r border-border bg-card z-20">
           {HOURS.map((hour) => (
             <div
               key={hour}
@@ -114,10 +114,10 @@ export function CalendarGrid({ events, currentWeekStart, onEventClick, onEventEd
               className="absolute left-0 right-0 z-20 pointer-events-none flex items-center"
               style={{ top: `${currentTimeTop}px`, transform: 'translateY(-50%)' }}
             >
-              <div className="bg-black text-white dark:bg-white dark:text-black text-[10px] px-1.5 py-0.5 rounded ml-1 font-semibold z-30 shadow-sm">
+              <div className="bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5 rounded ml-1 font-semibold z-30 shadow-sm">
                 {formatNowTime()}
               </div>
-              <div className="flex-1 h-[2px] bg-black dark:bg-white ml-2 shadow-sm" />
+              <div className="flex-1 h-[2px] bg-primary ml-2 shadow-sm" />
             </div>
           )}
 

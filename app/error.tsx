@@ -17,7 +17,7 @@ export default function GlobalError({
   }, [error])
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-b from-background to-muted">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-linear-to-b from-background to-muted">
       <div className="max-w-md w-full">
         <div className="text-center space-y-6">
           <div className="flex justify-center">

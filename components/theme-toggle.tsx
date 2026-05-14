@@ -18,7 +18,7 @@ type ThemeToggleProps = {
 
 export const ThemeToggle = forwardRef<HTMLButtonElement, ThemeToggleProps>(
   function ThemeToggle({ variant = 'default', className, showLabel = false }, ref) {
-    const { theme, setTheme } = useTheme()
+    const { theme, resolvedTheme, setTheme } = useTheme()
     const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
@@ -26,13 +26,13 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, ThemeToggleProps>(
     }, [])
 
     const sidebarButtonIconOnly =
-      'rounded-lg p-2 transition-colors text-zinc-400 hover:bg-white/10 hover:text-white dark:text-gray-500 dark:hover:bg-gray-100 dark:hover:text-gray-900'
+      'rounded-lg p-2 transition-colors text-muted-foreground hover:bg-card/70 hover:text-foreground'
 
     const sidebarButtonWithLabel =
-      'rounded-lg px-3 py-2 flex items-center gap-2 transition-colors text-zinc-400 hover:bg-white/10 hover:text-white dark:text-gray-500 dark:hover:bg-gray-100 dark:hover:text-gray-900'
+      'rounded-lg px-3 py-2 flex items-center gap-2 transition-colors text-muted-foreground hover:bg-card/70 hover:text-foreground'
 
     if (!mounted) {
-      const label = theme === 'dark' ? 'Light' : 'Dark'
+      const label = 'Dark'
       return (
         <button
           ref={ref}
@@ -48,40 +48,42 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, ThemeToggleProps>(
           aria-label="Toggle theme"
         >
           <Sun className="h-5 w-5" />
-          {showLabel && <span className={cn("text-sm font-medium tracking-tight", variant === 'sidebar' ? "text-stone-700 dark:text-slate-300" : "text-zinc-200 dark:text-zinc-100")}>{label}</span>}
+          {showLabel && <span className={cn("text-sm font-medium tracking-tight", "text-foreground")}>{label}</span>}
         </button>
       )
     }
 
-    const label = theme === 'dark' ? 'Light' : 'Dark'
+    const activeTheme = resolvedTheme ?? theme
+    const isDark = activeTheme === 'dark'
+    const label = isDark ? 'Light' : 'Dark'
 
     return (
       <button
         ref={ref}
         type="button"
-        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        onClick={() => setTheme(isDark ? 'light' : 'dark')}
         className={cn(
           variant === 'sidebar'
             ? showLabel
               ? sidebarButtonWithLabel
               : sidebarButtonIconOnly
-            : 'rounded-md p-2 text-foreground transition-colors hover:bg-accent/50 dark:hover:bg-accent/20',
+            : 'rounded-md p-2 text-foreground bg-primary transition-colors hover:bg-accent/50 dark:hover:bg-accent/20',
           className,
         )}
         aria-label="Toggle theme"
       >
-        {theme === 'dark' ? (
+        {isDark ? (
           <Sun
             className={cn(
               'h-5 w-5',
-              variant === 'sidebar' ? 'text-stone-700 dark:text-slate-300' : 'text-yellow-400',
+              variant === 'sidebar' ? 'text-muted-foreground' : 'text-white', 
             )}
           />
         ) : (
           <Moon
             className={cn(
               'h-5 w-5',
-              variant === 'sidebar' ? 'text-stone-700 dark:text-slate-300' : 'text-slate-700',
+              variant === 'sidebar' ? 'text-muted-foreground' : 'text-white',
             )}
           />
         )}

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Sparkles, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export type TopNavLink = { label: string; href: string }
 
@@ -39,12 +40,13 @@ export function NavigationMenu({ links = [
 // Action buttons
 export function NavigationActions() {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2">
+      <ThemeToggle />
       <Button asChild variant="ghost" className="hidden rounded-full px-4 text-sm font-semibold text-foreground hover:bg-background/20 md:inline-flex">
-        <Link href="/register">Sign in</Link>
+        <Link href="/pricing">Pricing</Link>
       </Button>
       <Button asChild className="rounded-full px-5 text-sm font-semibold" style={{ boxShadow: 'var(--shadow-elegant)' }}>
-        <Link href="/register" className="inline-flex items-center gap-2">
+        <Link href="/login" className="inline-flex items-center gap-2">
           Get started
           <ArrowRight className="h-4 w-4" />
         </Link>

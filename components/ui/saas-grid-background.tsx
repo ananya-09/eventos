@@ -87,11 +87,11 @@ export default function SaaSGridBackground({
 
     const rng = mulberry32(hashToSeed(seed))
 
-    // Theme palette stays inside blue/purple/white accents.
+    // Theme palette aligned with Eventos design tokens.
     const palette = [
-      { r: 59, g: 130, b: 246 }, // blue
-      { r: 139, g: 92, b: 246 }, // purple
       { r: 74, g: 116, b: 167 }, // primary blue
+      { r: 20, g: 42, b: 68 }, // dark blue
+      { r: 220, g: 234, b: 247 }, // light ice blue
       { r: 255, g: 255, b: 255 }, // white glow
     ]
 
@@ -160,7 +160,7 @@ export default function SaaSGridBackground({
   }, [dims, gridSize, squaresCount, seed, minSquareOpacity, maxSquareOpacity])
 
   const gridLines = useMemo(() => {
-    const lineColor = 'rgba(91, 102, 255, 0.14)'
+    const lineColor = 'rgba(74, 116, 167, 0.16)'
     return {
       backgroundImage: `
         linear-gradient(to right, ${lineColor} 1px, transparent 1px),
@@ -178,8 +178,8 @@ export default function SaaSGridBackground({
         radial-gradient(
           ellipse 85% 70% at 50% 18%,
           rgba(255, 255, 255, 0) 0%,
-          rgba(255, 255, 255, 0.4) 45%,
-          rgba(245, 248, 255, 0.95) 100%
+          rgba(220, 234, 247, 0.42) 45%,
+          rgba(236, 244, 252, 0.95) 100%
         )
       `,
     } as const
@@ -190,9 +190,9 @@ export default function SaaSGridBackground({
       background: `
         radial-gradient(
           ellipse 85% 70% at 50% 18%,
-          rgba(14, 16, 30, 0) 0%,
-          rgba(14, 16, 30, 0.42) 45%,
-          rgba(9, 10, 20, 0.9) 100%
+          rgba(8, 20, 38, 0) 0%,
+          rgba(8, 20, 38, 0.46) 45%,
+          rgba(8, 20, 38, 0.92) 100%
         )
       `,
     } as const

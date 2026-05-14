@@ -92,15 +92,15 @@ export default function PricingSection() {
         </div>
 
         {/* Billing toggle */}
-        <div className="mt-8 inline-flex items-center gap-2 rounded-full border border-border/70 bg-muted px-1 py-1 text-[11px] font-medium text-muted-foreground shadow-sm">
+        <div className="mt-8 flex w-full flex-col items-stretch gap-2 rounded-3xl border border-border/70 bg-muted p-1 text-[11px] font-medium text-muted-foreground shadow-sm sm:inline-flex sm:w-auto sm:flex-row sm:items-center sm:gap-0 sm:rounded-full sm:px-1 sm:py-1">
           <button
             type="button"
             onClick={() => setBillingPeriod('monthly')}
             className={[
-              'rounded-full px-5 py-2 uppercase tracking-[0.18em] transition-all whitespace-nowrap',
+              'flex-1 rounded-full px-5 py-2 uppercase tracking-[0.18em] transition-all whitespace-nowrap',
               billingPeriod === 'monthly'
-                ? 'bg-background text-neutral-900 shadow-sm dark:bg-neutral-50 dark:text-neutral-900'
-                : 'bg-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200',
+                ? 'bg-card text-foreground shadow-sm'
+                : 'bg-transparent text-muted-foreground hover:text-foreground',
             ].join(' ')}
           >
             Monthly
@@ -110,10 +110,10 @@ export default function PricingSection() {
             type="button"
             onClick={() => setBillingPeriod('yearly')}
             className={[
-              'flex items-center justify-center gap-2 rounded-full px-5 py-2 uppercase tracking-[0.18em] transition-all whitespace-nowrap',
+              'flex flex-1 items-center justify-center gap-2 rounded-full px-5 py-2 uppercase tracking-[0.18em] transition-all whitespace-nowrap',
               billingPeriod === 'yearly'
-                ? 'bg-background text-neutral-900 shadow-sm dark:bg-neutral-50 dark:text-neutral-900'
-                : 'bg-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200',
+                ? 'bg-card text-foreground shadow-sm'
+                : 'bg-transparent text-muted-foreground hover:text-foreground',
             ].join(' ')}
           >
             <span>Annually</span>
@@ -121,7 +121,7 @@ export default function PricingSection() {
               className={[
                 'rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.18em] transition-colors whitespace-nowrap',
                 billingPeriod === 'yearly'
-                  ? 'bg-background/80 text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50'
+                  ? 'bg-secondary text-foreground'
                   : 'border border-emerald-500 text-emerald-600 dark:text-emerald-400',
               ].join(' ')}
             >
@@ -131,21 +131,16 @@ export default function PricingSection() {
         </div>
 
         {/* Cards */}
-        <div
-          key={billingPeriod}
-          ref={cardsRef}
-          className="mt-12 grid w-full gap-6 md:grid-cols-3"
-        >
+        <div key={billingPeriod} ref={cardsRef} className="mt-12 grid w-full gap-6 lg:grid-cols-3 md:grid-cols-2">
           {plans.map((plan, index) => {
             const isSelected = index === selectedIndex
-            const isPopular = plan.highlight
 
             const baseCard =
               'flex flex-col rounded-[26px] border p-6 shadow-sm transition-transform duration-200 md:p-7 cursor-pointer'
 
             const colorClasses = isSelected
-              ? 'border-transparent bg-black text-white shadow-md shadow-black/30 scale-[1.01] dark:bg-neutral-100 dark:text-neutral-900 dark:shadow-neutral-900/20'
-              : 'border-neutral-200 bg-white text-neutral-900 shadow-sm dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-50'
+              ? 'border-transparent bg-primary text-primary-foreground shadow-md shadow-primary/30 scale-[1.01]'
+              : 'border-border bg-card text-foreground shadow-sm'
 
             return (
               <div
@@ -161,7 +156,6 @@ export default function PricingSection() {
                   }
                 }}
               >
-              
                 <h3 className="text-sm font-semibold tracking-tight">{plan.name}</h3>
                 <p className="mt-1 text-xs text-muted-foreground">{plan.description}</p>
                 <div className="mt-6 flex items-baseline gap-1">
@@ -173,8 +167,8 @@ export default function PricingSection() {
                   className={[
                     'mt-6 w-full justify-center rounded-full text-sm font-medium',
                     isSelected
-                      ? 'bg-white text-black hover:bg-neutral-100 dark:bg-black dark:text-white dark:hover:bg-neutral-900 border-transparent'
-                      : 'bg-black text-white hover:bg-neutral-900 dark:bg-neutral-100 dark:text-black dark:hover:bg-neutral-200 border-transparent',
+                      ? 'bg-primary-foreground text-primary hover:bg-primary-foreground/90 border-transparent'
+                      : 'bg-muted text-muted-foreground hover:bg-muted/80 border-transparent',
                   ].join(' ')}
                 >
                   Purchase plan

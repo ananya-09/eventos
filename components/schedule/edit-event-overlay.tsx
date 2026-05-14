@@ -76,8 +76,9 @@ export function EditEventOverlay({ event, initialRect, onClose, onSave }: EditEv
     position: 'fixed',
     top: isCentered ? '50%' : `${initialRect.top}px`,
     left: isCentered ? '50%' : `${initialRect.left}px`,
-    width: isCentered ? '400px' : `${initialRect.width}px`,
-    height: isCentered ? '460px' : `${initialRect.height}px`,
+    width: isCentered ? 'min(92vw, 400px)' : `${initialRect.width}px`,
+    height: isCentered ? 'auto' : `${initialRect.height}px`,
+    maxHeight: isCentered ? 'min(90vh, 460px)' : undefined,
     transform: isCentered ? 'translate(-50%, -50%)' : 'translate(0, 0)',
     transition: 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
     zIndex: 100,
@@ -110,7 +111,7 @@ export function EditEventOverlay({ event, initialRect, onClose, onSave }: EditEv
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="flex h-10 w-full rounded-md border border-white/30 bg-white/50 px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-black"
+              className="flex h-10 w-full rounded-md border-border/30 bg-card/50 px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
           
@@ -120,18 +121,18 @@ export function EditEventOverlay({ event, initialRect, onClose, onSave }: EditEv
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="flex h-10 w-full rounded-md border border-white/30 bg-white/50 px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-black"
+              className="flex h-10 w-full rounded-md border-border/30 bg-card/50 px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="grid gap-2">
               <label className="text-sm font-medium">Start</label>
               <input
                 type="time"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="flex h-10 w-full rounded-md border border-white/30 bg-white/50 px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-black"
+                className="flex h-10 w-full rounded-md border-border/30 bg-card/50 px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
             <div className="grid gap-2">
@@ -140,7 +141,7 @@ export function EditEventOverlay({ event, initialRect, onClose, onSave }: EditEv
                 type="time"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
-                className="flex h-10 w-full rounded-md border border-white/30 bg-white/50 px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-black"
+                className="flex h-10 w-full rounded-md border-border/30 bg-card/50 px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
           </div>
@@ -150,7 +151,7 @@ export function EditEventOverlay({ event, initialRect, onClose, onSave }: EditEv
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="flex h-10 w-full rounded-md border border-white/30 bg-white/50 px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-black"
+              className="flex h-10 w-full rounded-md border-border/30 bg-card/50 px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="Pending">Pending</option>
               <option value="Completed">Completed</option>
@@ -158,8 +159,8 @@ export function EditEventOverlay({ event, initialRect, onClose, onSave }: EditEv
           </div>
 
           <div className="flex justify-end gap-2 mt-2">
-            <Button type="button" variant="ghost" onClick={handleCancel} className="hover:bg-white/30">Cancel</Button>
-            <Button type="button" onClick={handleSave} className="bg-black text-white hover:bg-black/80">Done</Button>
+            <Button type="button" variant="ghost" onClick={handleCancel} className="hover:bg-card/30">Cancel</Button>
+            <Button type="button" onClick={handleSave} className="bg-primary text-primary-foreground hover:bg-primary/80">Done</Button>
           </div>
         </div>
       </div>

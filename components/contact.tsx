@@ -27,8 +27,8 @@ export default function Contact() {
           </p>
         </div>
 
-        <div className="contact-panel glass-surface mx-auto mt-12 max-w-5xl rounded-[20px] p-6 sm:p-8 md:p-10 lg:p-12">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="contact-panel glass-surface mx-auto mt-12 max-w-5xl rounded-[20px] p-5 sm:p-6 md:p-8 lg:p-12">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-8 lg:gap-16">
             {/* Form */}
             <div>
               <h3 className="text-xl font-bold text-foreground">Send us a message</h3>

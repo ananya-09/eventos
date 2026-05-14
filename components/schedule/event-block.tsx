@@ -79,7 +79,7 @@ export function EventBlock({ event, hourHeight, baseHour, onClick, onEditClick, 
         <span className="font-semibold leading-tight">{event.title}</span>
         <button 
           onClick={handleEditClick}
-          className="opacity-50 hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/20 rounded p-0.5 transition-colors -mr-1 -mt-1"
+          className="opacity-50 hover:opacity-100 hover:bg-primary/10 rounded p-0.5 transition-colors -mr-1 -mt-1"
         >
           <MoreHorizontal className="h-4 w-4" />
         </button>

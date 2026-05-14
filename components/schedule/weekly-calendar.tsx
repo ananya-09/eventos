@@ -76,6 +76,24 @@ export function WeeklyCalendar() {
   }, [currentWeekStart])
   
   const headerDateString = `${format(currentWeekStart, 'dd')}-${format(weekEnd, 'dd MMMM yyyy')}`
+  const days = useMemo(() => {
+    return Array.from({ length: 7 }).map((_, i) => {
+      const date = addWeeks(currentWeekStart, 0)
+      date.setDate(date.getDate() + i)
+      return {
+        dateString: format(date, 'yyyy-MM-dd'),
+        display: format(date, 'd - eee'),
+        isToday: format(date, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd'),
+      }
+    })
+  }, [currentWeekStart])
+
+  const groupedDays = useMemo(() => {
+    return days.map((day) => ({
+      ...day,
+      events: filteredEvents.filter((event) => event.date === day.dateString),
+    }))
+  }, [days, filteredEvents])
 
   const weeks = useMemo(() => {
     const now = new Date()
@@ -104,38 +122,38 @@ export function WeeklyCalendar() {
   return (
     <div className="flex flex-col h-full gap-6">
       {/* Top Navigation / Breadcrumb */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm text-slate-500">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <span>Maham</span>
           <span>&gt;</span>
-          <span className="font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1">
-            <div className="p-1 rounded-full bg-slate-100 dark:bg-slate-800">
+          <span className="font-semibold text-foreground flex items-center gap-1">
+            <div className="p-1 rounded-full bg-secondary">
                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </div>
             Schedule
           </span>
         </div>
-        <div className="flex items-center gap-4 text-slate-500">
-          <Bell className="h-5 w-5 cursor-pointer hover:text-slate-900 dark:hover:text-slate-100" />
-          <MessageSquare className="h-5 w-5 cursor-pointer hover:text-slate-900 dark:hover:text-slate-100" />
-          <Search className="h-5 w-5 cursor-pointer hover:text-slate-900 dark:hover:text-slate-100" />
+        <div className="flex items-center gap-4 text-muted-foreground">
+          <Bell className="h-5 w-5 cursor-pointer hover:text-foreground" />
+          <MessageSquare className="h-5 w-5 cursor-pointer hover:text-foreground" />
+          <Search className="h-5 w-5 cursor-pointer hover:text-foreground" />
         </div>
       </div>
 
       {/* Main Header Toolbar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 w-48 shrink-0">
+      <div className="flex flex-col gap-4 rounded-2xl border-border bg-card/80 p-4 shadow-sm backdrop-blur md:flex-row md:items-center md:justify-between">
+        <div className="flex min-w-0 items-center gap-3">
+            <h1 className="min-w-0 text-2xl font-bold text-foreground sm:text-3xl">
             {headerDateString}
             </h1>
         </div>
         
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar shrink-0">
+        <div className="flex flex-wrap items-center gap-2 md:justify-end">
           <Select 
             value={currentWeekStart.toISOString()} 
             onValueChange={handleWeekChange}
           >
-            <SelectTrigger className="w-[220px] h-9 rounded-full bg-slate-50 dark:bg-slate-800 border-none font-medium text-slate-700 dark:text-slate-300">
+            <SelectTrigger className="h-9 w-full rounded-full border-none bg-secondary font-medium text-foreground sm:w-[220px]">
               <SelectValue placeholder="Select Week" />
             </SelectTrigger>
             <SelectContent>
@@ -146,13 +164,13 @@ export function WeeklyCalendar() {
           </Select>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex flex-wrap items-center gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="rounded-full gap-2 border-slate-200 dark:border-slate-700 h-9">
+              <Button variant="outline" className="rounded-full gap-2 border-border h-9">
                 <Filter className="h-4 w-4" /> Filter 
                 {filterStatus !== 'all' && (
-                  <span className="bg-black text-white dark:bg-white dark:text-black rounded-full h-5 w-5 flex items-center justify-center text-xs">1</span>
+                  <span className="bg-primary text-primary-foreground rounded-full h-5 w-5 flex items-center justify-center text-xs">1</span>
                 )}
               </Button>
             </DropdownMenuTrigger>
@@ -177,21 +195,56 @@ export function WeeklyCalendar() {
               </DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button className="rounded-full gap-2 bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black h-9" onClick={() => setIsAddOpen(true)}>
+          <Button className="rounded-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90 h-9" onClick={() => setIsAddOpen(true)}>
             <Plus className="h-4 w-4" /> Add Event
           </Button>
         </div>
       </div>
 
       {/* Grid */}
-      <div className="flex-1 min-h-0 relative">
-        <CalendarGrid 
-          events={filteredEvents} 
-          currentWeekStart={currentWeekStart} 
-          onEventClick={setSelectedEvent}
-          onEventEditClick={(ev, rect) => setEditingEvent({ event: ev, rect })}
-          editingEventId={editingEvent?.event.id}
-        />
+      <div className="flex-1 min-h-0 relative space-y-4">
+        <div className="md:hidden space-y-4">
+          {groupedDays.map((day) => (
+            <section key={day.dateString} className="rounded-2xl border-border bg-card p-4 shadow-sm">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">{day.isToday ? 'Today' : 'Day'}</p>
+                  <h2 className="text-base font-semibold text-foreground">{day.display}</h2>
+                </div>
+                {day.isToday && <span className="rounded-full bg-primary px-3 py-1 text-[11px] font-semibold text-primary-foreground">Current</span>}
+              </div>
+
+              <div className="mt-4 space-y-3">
+                {day.events.length > 0 ? day.events.map((event) => (
+                  <button
+                    key={event.id}
+                    type="button"
+                    onClick={() => setSelectedEvent(event)}
+                    className="flex w-full items-start justify-between gap-4 rounded-2xl border-border bg-secondary px-4 py-3 text-left"
+                  >
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-foreground">{event.title}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">{event.startTime} - {event.endTime}</p>
+                    </div>
+                    <span className="rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold text-primary-foreground">{event.status ?? 'Scheduled'}</span>
+                  </button>
+                )) : (
+                  <p className="rounded-2xl border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">No events scheduled.</p>
+                )}
+              </div>
+            </section>
+          ))}
+        </div>
+
+        <div className="hidden md:block">
+          <CalendarGrid 
+            events={filteredEvents} 
+            currentWeekStart={currentWeekStart} 
+            onEventClick={setSelectedEvent}
+            onEventEditClick={(ev, rect) => setEditingEvent({ event: ev, rect })}
+            editingEventId={editingEvent?.event.id}
+          />
+        </div>
         
         {editingEvent && (
           <EditEventOverlay 
