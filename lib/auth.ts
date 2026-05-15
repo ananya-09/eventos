@@ -1,31 +1,29 @@
-import type { NextAuthOptions } from 'next-auth'
-import GitHubProvider from 'next-auth/providers/github'
-import GoogleProvider from 'next-auth/providers/google'
+import type { NextAuthOptions } from "next-auth";
+import GitHubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 
-if (!process.env.GITHUB_CLIENT_ID) {
-  throw new Error('Missing required environment variable: GITHUB_CLIENT_ID')
-}
-if (!process.env.GITHUB_CLIENT_SECRET) {
-  throw new Error('Missing required environment variable: GITHUB_CLIENT_SECRET')
-}
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
-const providers: any[] = [
-  GitHubProvider({
-    clientId: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  }),
-]
-
-if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-  providers.push(
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
-  )
-}
+import { prisma } from "@/lib/prisma";
 
 export const authOptions: NextAuthOptions = {
-  providers,
+  adapter: PrismaAdapter(prisma),
+
+  providers: [
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+
+      allowDangerousEmailAccountLinking: true,
+    }),
+
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+
+      allowDangerousEmailAccountLinking: true,
+    }),
+  ],
+
   secret: process.env.NEXTAUTH_SECRET,
-}
+};
