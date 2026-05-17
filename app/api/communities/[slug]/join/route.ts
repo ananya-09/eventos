@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+
 export async function POST(
     req: Request,
     context: { params: Promise<{ slug: string }> }
@@ -8,14 +11,48 @@ export async function POST(
     try {
         const { slug } = await context.params;
 
-        const userId = "cmp4gqpfc0000fa2gkdv006yq";
+        // Get logged in session
+        const session = await getServerSession(authOptions);
 
+        // Block unauthenticated users
+        if (!session?.user?.email) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "Unauthorized",
+                },
+                { status: 401 }
+            );
+        }
+
+        // Find real user from database
+        const user = await prisma.user.findUnique({
+            where: {
+                email: session.user.email,
+            },
+        });
+
+        // User does not exist
+        if (!user) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "User not found",
+                },
+                { status: 404 }
+            );
+        }
+
+        const userId = user.id;
+
+        // Find community
         const community = await prisma.community.findUnique({
             where: {
                 slug,
             },
         });
 
+        // Community does not exist
         if (!community) {
             return NextResponse.json(
                 {
@@ -26,6 +63,7 @@ export async function POST(
             );
         }
 
+        // Check existing membership
         const existingMembership = await prisma.communityMember.findUnique({
             where: {
                 userId_communityId: {
@@ -35,6 +73,7 @@ export async function POST(
             },
         });
 
+        // Prevent duplicate joins
         if (existingMembership) {
             return NextResponse.json(
                 {
@@ -45,6 +84,7 @@ export async function POST(
             );
         }
 
+        // Create membership
         const membership = await prisma.communityMember.create({
             data: {
                 userId,
