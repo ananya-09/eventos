@@ -23,6 +23,7 @@ export function Header() {
 export function NavigationMenu({ links = [
   { label: 'Home', href: '/' },
   { label: 'Features', href: '/features' },
+  { label: 'Communities', href: '/communities' },
   { label: 'Blogs', href: '/blogs' },
   { label: 'Contact Us', href: '/contact' },
 ] }: { links?: TopNavLink[] } = {}) {
@@ -59,6 +60,7 @@ export function NavigationActions() {
 export default function Navigation({ links = [
   { label: 'Home', href: '/' },
   { label: 'Features', href: '/features' },
+  { label: 'Communities', href: '/communities' },
   { label: 'Blogs', href: '/blogs' },
   { label: 'Contact Us', href: '/contact' },
 ] }: { links?: TopNavLink[] } = {}) {

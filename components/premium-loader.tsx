@@ -12,6 +12,12 @@ export default function PremiumLoader({ onComplete }: PremiumLoaderProps) {
   const [isHiding, setIsHiding] = useState(false);
 
   useEffect(() => {
+    // If loader already completed in this session, skip animation
+    if (typeof window !== 'undefined' && window.sessionStorage.getItem('loaderComplete')) {
+      setProgress(100);
+      return;
+    }
+
     // Smooth progress using requestAnimationFrame with easing
     const duration = 2600; // ms
     const start = performance.now();

@@ -24,6 +24,7 @@ model User {
   posts            Post[]
   comments         Comment[]
   likes            Like[]
+  events           Event[]
 }
 model Community {
   id          String   @id @default(cuid())
@@ -37,9 +38,12 @@ model Community {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  creator     User              @relation("CommunityCreator", fields: [creatorId], references: [id])
+  creator     User                 @relation("CommunityCreator", fields: [creatorId], references: [id])
   members     CommunityMember[]
   posts       Post[]
+  events      Event[]
+  categories  DiscussionCategory[]
+  channels    DiscussionChannel[]
 
   @@index([creatorId])
 }
@@ -76,13 +80,16 @@ model Post {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  community Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  author    User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  community Community          @relation(fields: [communityId], references: [id], onDelete: Cascade)
   comments  Comment[]
   likes     Like[]
+  channelId String?
+  channel   DiscussionChannel? @relation(fields: [channelId], references: [id], onDelete: SetNull)
 
   @@index([authorId])
   @@index([communityId])
+  @@index([channelId])
 }
 
 model Comment {
@@ -150,4 +157,60 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  banner      String?
+  location    String
+  startDate   DateTime
+  endDate     DateTime
+  communityId String
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  creator   User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  community Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+
+  @@index([createdById])
+  @@index([communityId])
+}
+
+model DiscussionCategory {
+  id          String   @id @default(cuid())
+  name        String
+  communityId String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  channels    DiscussionChannel[]
+
+  @@unique([name, communityId])
+  @@index([communityId])
+}
+
+model DiscussionChannel {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String
+  description String?
+  categoryId  String
+  communityId String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  category    DiscussionCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  community   Community          @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  posts       Post[]
+
+  @@unique([slug, communityId])
+  @@index([categoryId])
+  @@index([communityId])
 }

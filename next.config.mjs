@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+
   images: {
     remotePatterns: [
       {
@@ -13,10 +14,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**.unsplash.com',
+        hostname: 'images.unsplash.com',
       },
     ],
   },
+
   headers: async () => [
     {
       source: '/:path*',
@@ -32,6 +34,7 @@ const nextConfig = {
       ],
     },
   ],
+
   experimental: {
     optimizePackageImports: [
       '@radix-ui/react-dialog',
