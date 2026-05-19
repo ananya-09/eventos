@@ -43,15 +43,34 @@ export async function POST(
     });
   } catch (error: any) {
     console.error("CREATE DISCUSSION POST ERROR:", error);
+
     if (error.name === "ZodError") {
       return NextResponse.json(
-        { success: false, error: error.errors },
+        { success: false, errors: error.errors },
         { status: 400 }
       );
     }
+
+    if (error.statusCode === 429) {
+      const headers: Record<string, string> = {};
+      if (error.retryAfterMs) {
+        headers["Retry-After"] = String(Math.ceil(error.retryAfterMs / 1000));
+      }
+      return NextResponse.json(
+        { success: false, message: error.message },
+        { status: 429, headers }
+      );
+    }
+
+    const status =
+      error.message?.includes("Unauthorized") ? 403 :
+      error.message?.includes("member") ? 403 :
+      error.message?.includes("Invalid channel") ? 400 :
+      500;
+
     return NextResponse.json(
       { success: false, message: error.message || "Internal server error" },
-      { status: 500 }
+      { status }
     );
   }
 }

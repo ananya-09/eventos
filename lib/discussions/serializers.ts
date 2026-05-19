@@ -68,6 +68,14 @@ export function serializeChannelPost(post: any): ChannelPost {
       image: post.author.image,
     },
     channelId: post.channelId,
+    channel: post.channel
+      ? {
+          id: post.channel.id,
+          name: post.channel.name,
+          slug: post.channel.slug,
+        }
+      : undefined,
+    tags: post.tags ?? [],
     replies: serializedReplies,
     latestReplyAt,
     latestReplyUser,

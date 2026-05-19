@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { CategoryWithChannels, ChannelPost, ChannelOverview } from "./types";
+import { CategoryWithChannels, ChannelPost, ChannelOverview, DiscussionsOverview } from "./types";
 import { serializeCategoryWithChannels, serializeChannelPost, serializeChannelOverview } from "./serializers";
 import { seedCommunityDiscussions } from "./seed";
 
@@ -118,6 +118,65 @@ export async function getChannelPosts(
     return posts.map(serializeChannelPost);
   } catch (error) {
     console.error(`Failed to get channel posts for ${channelId}:`, error);
+    throw error;
+  }
+}
+
+export async function getDiscussionsOverview(
+  communitySlug: string,
+  recentLimit: number = 8
+): Promise<DiscussionsOverview> {
+  try {
+    const community = await prisma.community.findUnique({
+      where: { slug: communitySlug },
+      select: { id: true },
+    });
+
+    if (!community) {
+      return { totalDiscussions: 0, totalChannels: 0, recentPosts: [] };
+    }
+
+    const [totalDiscussions, totalChannels, recentPosts] = await Promise.all([
+      prisma.post.count({
+        where: { communityId: community.id, channelId: { not: null } },
+      }),
+      prisma.discussionChannel.count({
+        where: { communityId: community.id },
+      }),
+      prisma.post.findMany({
+        where: { communityId: community.id, channelId: { not: null } },
+        orderBy: { createdAt: "desc" },
+        take: recentLimit,
+        include: {
+          author: {
+            select: { id: true, name: true, image: true },
+          },
+          channel: {
+            select: { id: true, name: true, slug: true },
+          },
+          comments: {
+            orderBy: { createdAt: "asc" },
+            take: 3,
+            include: {
+              author: {
+                select: { id: true, name: true, image: true },
+              },
+            },
+          },
+          _count: {
+            select: { comments: true, likes: true },
+          },
+        },
+      }),
+    ]);
+
+    return {
+      totalDiscussions,
+      totalChannels,
+      recentPosts: recentPosts.map(serializeChannelPost),
+    };
+  } catch (error) {
+    console.error(`Failed to get discussions overview for ${communitySlug}:`, error);
     throw error;
   }
 }

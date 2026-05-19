@@ -8,7 +8,28 @@ export const createChannelSchema = z.object({
 });
 
 export const createDiscussionPostSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters").max(100, "Title must be 100 characters or less"),
-  content: z.string().min(10, "Post content must be at least 10 characters"),
-  channelId: z.string().min(1, "Channel ID is required"),
+  title: z
+    .string()
+    .min(3, "Title must be at least 3 characters")
+    .max(120, "Title must be 120 characters or less")
+    .trim(),
+  content: z
+    .string()
+    .min(10, "Content must be at least 10 characters")
+    .max(20000, "Content must be 20,000 characters or less")
+    .trim(),
+  channelId: z.string().min(1, "Please select a channel"),
+  tags: z
+    .array(
+      z
+        .string()
+        .min(1, "Tag cannot be empty")
+        .max(24, "Each tag must be 24 characters or less")
+        .regex(/^[a-zA-Z0-9_-]+$/, "Tags may only contain letters, numbers, hyphens, and underscores")
+    )
+    .max(5, "You can add up to 5 tags")
+    .optional()
+    .default([]),
 });
+
+export type CreateDiscussionPostInput = z.infer<typeof createDiscussionPostSchema>;

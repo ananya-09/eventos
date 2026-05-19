@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { staggerContainer, itemVariants } from "@/lib/animations";
-import { ChannelPost, ChannelOverview } from "@/lib/discussions/types";
+import { ChannelPost, ChannelOverview, CategoryWithChannels } from "@/lib/discussions/types";
 import DiscussionCard from "./DiscussionCard";
 import EmptyDiscussions from "./EmptyDiscussions";
 import ChannelHeader from "./ChannelHeader";
@@ -13,12 +13,16 @@ interface DiscussionFeedProps {
   initialPosts: ChannelPost[];
   channel: ChannelOverview;
   communitySlug: string;
+  categories: CategoryWithChannels[];
+  isMember: boolean;
 }
 
 export default function DiscussionFeed({
   initialPosts,
   channel,
   communitySlug,
+  categories,
+  isMember,
 }: DiscussionFeedProps) {
   const [posts, setPosts] = useState<ChannelPost[]>(initialPosts);
   const [isComposeOpen, setIsComposeOpen] = useState(false);
@@ -45,6 +49,7 @@ export default function DiscussionFeed({
         description={channel.description}
         postsCount={posts.length}
         communitySlug={communitySlug}
+        channelSlug={channel.slug}
         onCreateClick={() => setIsComposeOpen(true)}
       />
 
@@ -77,6 +82,8 @@ export default function DiscussionFeed({
             onClose={() => setIsComposeOpen(false)}
             channelId={channel.id}
             communitySlug={communitySlug}
+            categories={categories}
+            isMember={isMember}
             onAddOptimisticPost={handleAddOptimisticPost}
             onConfirmPost={handleConfirmPost}
             onRollbackPost={handleRollbackPost}

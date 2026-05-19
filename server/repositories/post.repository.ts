@@ -1,4 +1,4 @@
-import prisma from '@/server/db/prisma'
+import { prisma } from '@/lib/prisma'
 import type { CreatePostInput } from '@/server/validators/post.validator'
 
 export class PostRepository {

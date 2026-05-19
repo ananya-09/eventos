@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Hash, Plus, MessageSquare } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
@@ -8,6 +9,7 @@ interface ChannelHeaderProps {
   description: string | null;
   postsCount: number;
   communitySlug: string;
+  channelSlug: string;
   onCreateClick?: () => void;
 }
 
@@ -16,15 +18,10 @@ export default function ChannelHeader({
   description,
   postsCount,
   communitySlug,
+  channelSlug,
   onCreateClick,
 }: ChannelHeaderProps) {
-  const handleCreateDiscussion = () => {
-    if (onCreateClick) {
-      onCreateClick();
-    } else {
-      window.location.href = `/communities/${communitySlug}/feed`;
-    }
-  };
+  const newDiscussionHref = `/communities/${communitySlug}/discussions/new?channel=${channelSlug}`;
 
   return (
     <Card className="bg-white/80 backdrop-blur-xl border border-slate-200/60 rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative overflow-hidden group">
@@ -45,13 +42,22 @@ export default function ChannelHeader({
         </div>
       </div>
 
-      <button
-        onClick={handleCreateDiscussion}
-        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#34629f] hover:bg-[#2e68a8] text-white font-bold text-xs rounded-xl shadow-sm hover:shadow transition-all duration-200 shrink-0 relative z-10"
-      >
-        <Plus className="w-4 h-4" />
-        <span>New Thread</span>
-      </button>
+      <div className="flex items-center gap-2 shrink-0 relative z-10">
+        <button
+          type="button"
+          onClick={onCreateClick}
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#34629f] hover:bg-[#2e68a8] text-white font-bold text-xs rounded-xl shadow-sm hover:shadow transition-all duration-200"
+        >
+          <Plus className="w-4 h-4" />
+          <span>New Thread</span>
+        </button>
+        <Link
+          href={newDiscussionHref}
+          className="hidden sm:inline-flex text-[10px] font-extrabold text-[#34629f] hover:underline uppercase tracking-wider px-2"
+        >
+          Full editor
+        </Link>
+      </div>
     </Card>
   );
 }

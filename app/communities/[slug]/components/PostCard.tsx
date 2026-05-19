@@ -20,7 +20,7 @@ import { itemVariants } from "@/lib/animations";
 
 // Split subcomponents
 import PostHeader from "./PostHeader";
-import LikeButton from "./LikeButton";
+import VotePanel from "./VotePanel";
 import CommentSection from "./CommentSection";
 import InlinePostEditor from "./InlinePostEditor";
 
@@ -41,6 +41,8 @@ type Post = {
   content: string;
   createdAt: string;
   isLiked?: boolean;
+  userVote?: number | null;
+  score?: number;
   comments?: Comment[];
   author: {
     id?: string;
@@ -61,13 +63,6 @@ interface PostCardProps {
 
 export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
   const { data: session } = useSession();
-
-  // Separate all mutation state logic into modular custom hooks
-  const { isLiked, likesCount, isLiking, toggleLike } = useLikePost(
-    post.id,
-    !!post.isLiked,
-    post._count?.likes || 0
-  );
 
   const {
     comments,
@@ -151,11 +146,10 @@ export default function PostCard({ post, onDelete, onUpdate }: PostCardProps) {
 
           {!isEditing && (
             <div className="flex items-center gap-6 pt-2">
-              <LikeButton
-                isLiked={isLiked}
-                likesCount={likesCount}
-                isLiking={isLiking}
-                onLikeToggle={toggleLike}
+              <VotePanel
+                postId={post.id}
+                initialScore={post.score ?? post._count?.likes ?? 0}
+                initialUserVote={post.userVote ?? (post.isLiked ? 1 : null)}
               />
 
               <motion.button

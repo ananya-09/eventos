@@ -68,25 +68,38 @@ export async function GET(
     };
 
     if (userId) {
-      includeQuery.likes = {
+      includeQuery.votes = {
         where: { userId },
-        select: { userId: true },
+        select: { value: true },
       };
+    }
+
+    const { searchParams } = new URL(req.url);
+    const sort = searchParams.get("sort") || "hot";
+
+    let orderBy: any = { createdAt: "desc" };
+    if (sort === "hot") {
+      orderBy = { hotScore: "desc" };
+    } else if (sort === "top") {
+      orderBy = { score: "desc" };
     }
 
     // 4. Query posts efficiently
     const posts = await prisma.post.findMany({
       where: { communityId: community.id },
       include: includeQuery,
-      orderBy: { createdAt: "desc" },
+      orderBy,
     });
 
     // 5. Map isLiked into responses cleanly without N+1 overhead
     const postsWithLikes = posts.map((post: any) => {
-      const isLiked = userId ? (post.likes && post.likes.length > 0) : false;
-      const { likes, ...rest } = post;
+      const userVoteRecord = userId && post.votes && post.votes[0] ? post.votes[0] : null;
+      const userVote = userVoteRecord ? userVoteRecord.value : null;
+      const isLiked = userVote === 1;
+      const { votes, ...rest } = post;
       return {
         ...rest,
+        userVote,
         isLiked,
       };
     });

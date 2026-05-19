@@ -6,7 +6,7 @@ import { createPostSchema } from "@/server/validators/post.validator";
 import { PostService } from "@/server/services/post.service";
 
 // GET /api/posts
-export async function GET() {
+export async function GET(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     let userId: string | null = null;
@@ -60,25 +60,36 @@ export async function GET() {
     };
 
     if (userId) {
-      includeQuery.likes = {
+      includeQuery.votes = {
         where: { userId },
-        select: { userId: true },
+        select: { value: true },
       };
+    }
+
+    const { searchParams } = new URL(req.url);
+    const sort = searchParams.get("sort") || "hot";
+
+    let orderBy: any = { createdAt: "desc" };
+    if (sort === "hot") {
+      orderBy = { hotScore: "desc" };
+    } else if (sort === "top") {
+      orderBy = { score: "desc" };
     }
 
     // 1. Fetch all posts
     const posts = await prisma.post.findMany({
       include: includeQuery,
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy,
     });
 
     const postsWithLikes = posts.map((post: any) => {
-      const isLiked = userId ? (post.likes && post.likes.length > 0) : false;
-      const { likes, ...rest } = post;
+      const userVoteRecord = userId && post.votes && post.votes[0] ? post.votes[0] : null;
+      const userVote = userVoteRecord ? userVoteRecord.value : null;
+      const isLiked = userVote === 1;
+      const { votes, ...rest } = post;
       return {
         ...rest,
+        userVote,
         isLiked,
       };
     });

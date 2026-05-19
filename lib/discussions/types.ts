@@ -28,6 +28,12 @@ export interface ThreadReply {
   postId: string;
 }
 
+export interface ChannelSummary {
+  id: string;
+  name: string;
+  slug: string;
+}
+
 export interface ChannelPost {
   id: string;
   title: string;
@@ -37,8 +43,16 @@ export interface ChannelPost {
   commentsCount: number;
   author: Creator;
   channelId: string | null;
+  channel?: ChannelSummary;
+  tags?: string[];
   replies?: ThreadReply[];
   latestReplyAt?: string;
   latestReplyUser?: Creator;
   participants?: Creator[];
+}
+
+export interface DiscussionsOverview {
+  totalDiscussions: number;
+  totalChannels: number;
+  recentPosts: ChannelPost[];
 }

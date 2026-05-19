@@ -24,7 +24,17 @@ model User {
   posts            Post[]
   comments         Comment[]
   likes            Like[]
+  bookmarks        Bookmark[]
   events           Event[]
+  commentReports   CommentReport[]
+  notificationsReceived Notification[]  @relation("NotificationRecipient")
+  notificationsSent     Notification[]  @relation("NotificationNotifier")
+  subscriptions         Subscription[]
+  activities            Activity[]
+  reputation            Int             @default(0)
+  postVotes             PostVote[]
+  commentVotes          CommentVote[]
+  badges                UserBadge[]
 }
 model Community {
   id          String   @id @default(cuid())
@@ -44,6 +54,7 @@ model Community {
   events      Event[]
   categories  DiscussionCategory[]
   channels    DiscussionChannel[]
+  activities  Activity[]
 
   @@index([creatorId])
 }
@@ -76,6 +87,8 @@ model Post {
   content     String   @db.Text
   authorId    String
   communityId String
+  pinned      Boolean  @default(false)
+  locked      Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -84,12 +97,20 @@ model Post {
   community Community          @relation(fields: [communityId], references: [id], onDelete: Cascade)
   comments  Comment[]
   likes     Like[]
+  bookmarks Bookmark[]
   channelId String?
   channel   DiscussionChannel? @relation(fields: [channelId], references: [id], onDelete: SetNull)
+  notifications Notification[]
+  score     Int                @default(0)
+  hotScore  Float              @default(0.0)
+  tags      String[]           @default([])
+  votes     PostVote[]
 
   @@index([authorId])
   @@index([communityId])
   @@index([channelId])
+  @@index([score])
+  @@index([hotScore])
 }
 
 model Comment {
@@ -97,18 +118,43 @@ model Comment {
   content   String   @db.Text
   authorId  String
   postId    String
+  parentId  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relations
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  post   Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies Comment[] @relation("CommentReplies")
+  deletedAt DateTime?
+  reports CommentReport[]
+  score     Int             @default(0)
+  votes     CommentVote[]
 
   @@index([authorId])
-  @@index([postId])
+  @@index([postId, parentId, createdAt])
+  @@index([parentId, createdAt])
+  @@index([deletedAt])
+  @@index([score])
 }
 
 model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+}
+
+model Bookmark {
   id        String   @id @default(cuid())
   userId    String
   postId    String
@@ -213,4 +259,149 @@ model DiscussionChannel {
   @@unique([slug, communityId])
   @@index([categoryId])
   @@index([communityId])
+}
+
+model CommentReport {
+  id          String   @id @default(cuid())
+  userId      String
+  commentId   String
+  reason      String
+  createdAt   DateTime @default(now())
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment     Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId])
+  @@index([userId])
+  @@index([commentId])
+}
+
+enum NotificationType {
+  REPLY
+  MENTION
+  LIKE
+  MODERATION
+  ANNOUNCEMENT
+  THREAD_ACTIVITY
+}
+
+enum SubscriptionTarget {
+  THREAD
+  COMMUNITY
+}
+
+enum SubscriptionType {
+  WATCH
+  MUTE
+}
+
+model Notification {
+  id         String           @id @default(cuid())
+  userId     String
+  notifierId String?
+  type       NotificationType
+  entityType String
+  entityId   String
+  postId     String?
+  commentId  String?
+  isRead     Boolean          @default(false)
+  metadata   Json?            // { count?: number, reason?: string, bodySnippet?: string }
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  // Relations
+  user     User  @relation("NotificationRecipient", fields: [userId], references: [id], onDelete: Cascade)
+  notifier User? @relation("NotificationNotifier", fields: [notifierId], references: [id], onDelete: SetNull)
+  post     Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead, createdAt])
+  @@index([userId, createdAt])
+  @@index([entityType, entityId])
+}
+
+model Subscription {
+  id         String             @id @default(cuid())
+  userId     String
+  targetType SubscriptionTarget
+  targetId   String
+  type       SubscriptionType
+  createdAt  DateTime           @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, targetType, targetId])
+  @@index([targetType, targetId])
+}
+
+model Activity {
+  id          String   @id @default(cuid())
+  userId      String
+  communityId String?
+  type        String   // "CREATE_POST", "CREATE_COMMENT", "JOIN_COMMUNITY", etc.
+  entityType  String
+  entityId    String
+  createdAt   DateTime @default(now())
+
+  // Relations
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  community Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([communityId, createdAt])
+}
+
+model PostVote {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  value     Int      // 1 (upvote) or -1 (downvote)
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([postId])
+}
+
+model CommentVote {
+  id        String   @id @default(cuid())
+  userId    String
+  commentId String
+  value     Int      // 1 (upvote) or -1 (downvote)
+  createdAt DateTime @default(now())
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId])
+  @@index([commentId])
+}
+
+model Badge {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  description String
+  icon        String      // SVG string, image URL, or lucide icon name
+  type        String      // "MILESTONE", "ROLE", "STREAK"
+  createdAt   DateTime    @default(now())
+  users       UserBadge[]
+}
+
+model UserBadge {
+  id        String   @id @default(cuid())
+  userId    String
+  badgeId   String
+  awardedAt DateTime @default(now())
+
+  // Relations
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+  @@index([userId])
 }

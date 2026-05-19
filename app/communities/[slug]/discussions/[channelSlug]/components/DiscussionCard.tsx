@@ -89,7 +89,10 @@ export default function DiscussionCard({ post, communitySlug }: DiscussionCardPr
         <div className="flex-1 min-w-0 space-y-2">
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <Link href={`/communities/${communitySlug}/feed`} className="block">
+              <Link
+                href={`/communities/${communitySlug}/threads/${post.id}`}
+                className="block"
+              >
                 <h4 className="font-extrabold text-slate-800 text-sm sm:text-base group-hover:text-[#34629f] transition-colors leading-snug tracking-tight">
                   {post.title}
                 </h4>

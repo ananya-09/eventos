@@ -1,6 +1,10 @@
 import { prisma } from "@/lib/prisma";
+import { SubscriptionTarget, SubscriptionType } from "@prisma/client";
+import { NotificationService } from "@/server/services/notification.service";
+import { ReputationService } from "@/server/services/reputation.service";
 import { canManageChannels, canPostInDiscussions } from "./permissions";
 import { createChannelSchema, createDiscussionPostSchema } from "./validators";
+import { checkDiscussionPostRateLimit } from "./rate-limit";
 import { ChannelOverview, ChannelPost } from "./types";
 import { serializeChannelOverview, serializeChannelPost } from "./serializers";
 
@@ -95,8 +99,20 @@ export async function createDiscussionPost(
     });
 
     if (!channel) {
-      throw new Error("Invalid channel");
+      throw new Error("Invalid channel for this community");
     }
+
+    const rateCheck = await checkDiscussionPostRateLimit(userId, community.id);
+    if (!rateCheck.allowed) {
+      const err = new Error(
+        "You're creating discussions too quickly. Please wait a moment before posting again."
+      ) as Error & { statusCode?: number; retryAfterMs?: number };
+      err.statusCode = 429;
+      err.retryAfterMs = rateCheck.retryAfterMs;
+      throw err;
+    }
+
+    const now = new Date();
 
     const post = await prisma.post.create({
       data: {
@@ -105,19 +121,40 @@ export async function createDiscussionPost(
         authorId: userId,
         communityId: community.id,
         channelId: payload.channelId,
+        tags: payload.tags ?? [],
+        hotScore: ReputationService.calculateHotScore(0, now),
       },
       include: {
         author: {
-          select: { id: true, name: true, image: true }
+          select: { id: true, name: true, image: true },
+        },
+        channel: {
+          select: { id: true, name: true, slug: true },
         },
         _count: {
           select: {
             comments: true,
             likes: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
+
+    await Promise.all([
+      NotificationService.logActivity({
+        userId,
+        communityId: community.id,
+        type: "CREATE_DISCUSSION",
+        entityType: "Post",
+        entityId: post.id,
+      }),
+      NotificationService.setSubscription({
+        userId,
+        targetType: SubscriptionTarget.THREAD,
+        targetId: post.id,
+        type: SubscriptionType.WATCH,
+      }),
+    ]);
 
     return serializeChannelPost(post);
   } catch (error) {

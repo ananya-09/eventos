@@ -8,6 +8,7 @@ import { Hash, MessageSquarePlus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { CategoryWithChannels } from "@/lib/discussions/types";
 import CreateChannelModal from "./CreateChannelModal";
+import NewDiscussionButton from "./NewDiscussionButton";
 
 interface ChannelSidebarProps {
   categories: CategoryWithChannels[];
@@ -115,6 +116,13 @@ export default function ChannelSidebar({ categories, slug, isManager = false }: 
             ))}
           </div>
         )}
+
+        <div className="pt-2 border-t border-slate-100">
+          <NewDiscussionButton
+            communitySlug={slug}
+            className="w-full flex justify-center"
+          />
+        </div>
       </Card>
 
       <AnimatePresence>
