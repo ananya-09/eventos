@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { motion, AnimatePresence } from 'framer-motion'
 import type { LucideIcon } from 'lucide-react'
 import {
   X,
@@ -28,6 +29,8 @@ import {
   Briefcase,
   GraduationCap,
   Loader2,
+  Eye,
+  EyeOff,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -241,28 +244,60 @@ function StepProgressBar({
   total: number
 }) {
   return (
-    <div className="flex items-center gap-1.5 mb-6">
-      {Array.from({ length: total }).map((_, i) => (
-        <div
-          key={i}
-          className={cn(
-            'h-1.5 rounded-full flex-1 transition-all duration-300',
-            i < current
-              ? 'bg-primary'
-              : i === current
-                ? 'bg-primary-glow'
-                : 'bg-muted',
-          )}
-        />
-      ))}
+    <div className="space-y-3 mb-8 select-none">
+      <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+        <span>Step {current + 1} of {total}</span>
+        <span className="text-primary">
+          {Math.round(((current + 1) / total) * 100)}% Complete
+        </span>
+      </div>
+      <div className="flex items-center gap-2">
+        {Array.from({ length: total }).map((_, i) => {
+          const isActive = i === current
+          const isCompleted = i < current
+          const width = isCompleted ? '100%' : isActive ? '100%' : '0%'
+          return (
+            <div
+              key={i}
+              className="relative h-1.5 rounded-full flex-1 bg-muted/40 overflow-hidden"
+            >
+              <motion.div
+                className={cn(
+                  "absolute inset-y-0 left-0 rounded-full",
+                  isActive 
+                    ? "bg-gradient-to-r from-primary to-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]" 
+                    : "bg-primary"
+                )}
+                initial={{ width: "0%" }}
+                animate={{ width }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              />
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
 
 // ─── Auth Step ───────────────────────────────────────────────────────────────
 
-function AuthStep({ onAuthenticated }: { onAuthenticated: () => void }) {
+function AuthStep({
+  onAuthenticated,
+  onEmailSignUp,
+}: {
+  onAuthenticated: () => void
+  onEmailSignUp: (firstName: string, lastName: string, email: string, password: string) => void
+}) {
   const { data: session, status } = useSession()
+  const [view, setView] = useState<'initial' | 'password'>('initial')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   useEffect(() => {
     if (status === 'authenticated' && session) {
@@ -273,48 +308,250 @@ function AuthStep({ onAuthenticated }: { onAuthenticated: () => void }) {
   const callbackUrl =
     typeof window !== 'undefined' ? window.location.href : '/register'
 
+  const handleContinueToPassword = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!firstName.trim()) {
+      toast.error('First name is required')
+      return
+    }
+    if (!email.trim() || !email.includes('@')) {
+      toast.error('Please enter a valid email address')
+      return
+    }
+    setView('password')
+  }
+
+  const handleRegisterWithPassword = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!password) {
+      toast.error('Please enter a password')
+      return
+    }
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters')
+      return
+    }
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match')
+      return
+    }
+    onEmailSignUp(firstName, lastName, email, password)
+  }
+
   return (
-    <div className="space-y-6">
-      <div className="text-center space-y-2">
-        <div className="text-4xl mb-2">👋</div>
-        <h2 className="text-xl font-semibold text-foreground">
+    <div className="space-y-4">
+      <div className="text-center space-y-1">
+        <div className="text-3xl mb-1">👋</div>
+        <h2 className="text-lg font-semibold text-foreground">
           Welcome! Let&apos;s get you registered
         </h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs text-muted-foreground">
           Sign in to register for the workshop
         </p>
       </div>
 
-      <div className="space-y-3">
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full flex items-center gap-3 h-11 rounded-xl border-border/60 hover:bg-primary/10 dark:hover:bg-primary/10 hover:border-primary/30 transition-colors"
-          onClick={() => signIn('google', { callbackUrl })}
-        >
-          <Chrome className="w-5 h-5 shrink-0" />
-          Continue with Google
-        </Button>
+      <AnimatePresence mode="wait" initial={false}>
+        {view === 'initial' ? (
+          <motion.div
+            key="initial"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="space-y-3"
+          >
+            <Button
+              type="button"
+              variant="outline"
+              className="group relative w-full overflow-hidden flex items-center justify-center gap-3 h-11 rounded-xl border-border/60 bg-background/20 backdrop-blur-md text-foreground transition-all duration-300 hover:border-[#4285F4]/40 hover:bg-transparent hover:text-white focus-visible:border-[#4285F4]/50 focus-visible:ring-[#4285F4]/20"
+              onClick={() => signIn('google', { callbackUrl })}
+            >
+              {/* Circular expanding background fill */}
+              <span className="absolute inset-0 m-auto z-0 w-8 h-8 rounded-full bg-[#4285F4] scale-0 transition-transform duration-300 ease-out group-hover:scale-[25] group-hover:duration-[1500ms] group-hover:ease-in-out group-focus-visible:scale-[25] group-focus-visible:duration-[1500ms] group-focus-visible:ease-in-out" />
 
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full flex items-center gap-3 h-11 rounded-xl border-border/60 hover:bg-primary/10 dark:hover:bg-primary/10 hover:border-primary/30 transition-colors"
-          onClick={() => signIn('github', { callbackUrl })}
-        >
-          <Github className="w-5 h-5 shrink-0" />
-          Continue with GitHub
-        </Button>
+              {/* Content aligned above the fill */}
+              <span className="relative z-10 flex items-center gap-3">
+                <Chrome className="w-5 h-5 shrink-0" />
+                Continue with Google
+              </span>
+            </Button>
 
-        <div className="relative py-1">
-          <Separator />
-          <span className="absolute left-1/2 -translate-x-1/2 -top-2.5 bg-background px-2 text-xs text-muted-foreground">
-            or
-          </span>
-        </div>
+            <Button
+              type="button"
+              variant="outline"
+              className="group relative w-full overflow-hidden flex items-center justify-center gap-3 h-11 rounded-xl border-border/60 bg-background/20 backdrop-blur-md text-foreground transition-all duration-300 hover:border-[#181717]/40 hover:bg-transparent hover:text-white focus-visible:border-[#181717]/50 focus-visible:ring-[#181717]/20"
+              onClick={() => signIn('github', { callbackUrl })}
+            >
+              {/* Circular expanding background fill */}
+              <span className="absolute inset-0 m-auto z-0 w-8 h-8 rounded-full bg-[#181717] scale-0 transition-transform duration-300 ease-out group-hover:scale-[25] group-hover:duration-[1500ms] group-hover:ease-in-out group-focus-visible:scale-[25] group-focus-visible:duration-[1500ms] group-focus-visible:ease-in-out" />
 
-        <EmailSignInForm />
-      </div>
+              {/* Content aligned above the fill */}
+              <span className="relative z-10 flex items-center gap-3">
+                <Github className="w-5 h-5 shrink-0" />
+                Continue with GitHub
+              </span>
+            </Button>
+
+            <div className="relative py-1">
+              <Separator />
+              <span className="absolute left-1/2 -translate-x-1/2 -top-2.5 bg-background px-2 text-xs text-muted-foreground">
+                or
+              </span>
+            </div>
+
+            <form onSubmit={handleContinueToPassword} className="space-y-3">
+              {/* First Name & Last Name side-by-side */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1 text-left">
+                  <Label htmlFor="reg-first-name" className="text-xs font-medium text-muted-foreground">
+                    First Name
+                  </Label>
+                  <Input
+                    id="reg-first-name"
+                    type="text"
+                    placeholder="John"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="rounded-xl h-11"
+                    required
+                  />
+                </div>
+                <div className="space-y-1 text-left">
+                  <Label htmlFor="reg-last-name" className="text-xs font-medium text-muted-foreground">
+                    Last Name
+                  </Label>
+                  <Input
+                    id="reg-last-name"
+                    type="text"
+                    placeholder="Doe"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="rounded-xl h-11"
+                  />
+                </div>
+              </div>
+
+              {/* Email + Continue */}
+              <div className="space-y-1 text-left">
+                <Label htmlFor="reg-email" className="text-xs font-medium text-muted-foreground">
+                  Email Address
+                </Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="reg-email"
+                    type="email"
+                    placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="rounded-xl h-11 flex-1"
+                    required
+                  />
+                  <Button
+                    type="submit"
+                    className="h-11 px-4 rounded-xl bg-primary hover:bg-primary/90 text-white shrink-0"
+                  >
+                    Continue
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="password"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="space-y-3"
+          >
+            {/* Display entered email and allow changing it */}
+            <div className="flex items-center justify-between p-2.5 rounded-xl border border-border/40 bg-muted/10 backdrop-blur-md text-left">
+              <div className="truncate pr-2">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                  Email Address
+                </p>
+                <p className="text-sm font-medium text-foreground truncate">
+                  {email}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setView('initial')}
+                className="text-xs font-medium text-primary hover:underline px-2 py-1 rounded shrink-0"
+              >
+                Change
+              </button>
+            </div>
+
+            <form onSubmit={handleRegisterWithPassword} className="space-y-3">
+              <div className="space-y-1 text-left">
+                <Label htmlFor="reg-password" className="text-xs font-medium text-muted-foreground">
+                  Create Password
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="reg-password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="rounded-xl h-11 pr-10"
+                    required
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-md"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-1 text-left">
+                <Label htmlFor="reg-confirm-password" className="text-xs font-medium text-muted-foreground">
+                  Confirm Password
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="reg-confirm-password"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="rounded-xl h-11 pr-10"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-md"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full h-11 rounded-xl bg-primary hover:bg-primary/90 text-white font-medium flex items-center justify-center gap-2"
+              >
+                Continue <ChevronRight className="w-4 h-4" />
+              </Button>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {status === 'loading' && (
         <p className="text-center text-sm text-muted-foreground flex items-center justify-center gap-2">
@@ -326,63 +563,15 @@ function AuthStep({ onAuthenticated }: { onAuthenticated: () => void }) {
   )
 }
 
-function EmailSignInForm() {
-  const [email, setEmail] = useState('')
-  const [sent, setSent] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!email) return
-    const result = await signIn('email', {
-      email,
-      callbackUrl:
-        typeof window !== 'undefined' ? window.location.href : '/register',
-      redirect: false,
-    })
-    if (result?.ok) {
-      setSent(true)
-    } else if (result?.error) {
-      toast.error('Email sign-in is not available', {
-        description: 'Please use Google or GitHub to sign in.',
-      })
-    }
-  }
-
-  if (sent) {
-    return (
-      <p className="text-center text-sm text-muted-foreground py-2">
-        ✉️ Check your inbox for a magic link!
-      </p>
-    )
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
-      <Input
-        type="email"
-        placeholder="you@example.com"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="rounded-xl h-11 flex-1"
-        required
-      />
-      <Button
-        type="submit"
-          className="h-11 px-4 rounded-xl bg-primary hover:bg-primary/90 text-white shrink-0"
-      >
-        Continue
-      </Button>
-    </form>
-  )
-}
-
 // ─── Identity Step ────────────────────────────────────────────────────────────
 
 function IdentityStep({
   session,
+  regData,
   onNext,
 }: {
   session: { user?: { name?: string | null; email?: string | null } } | null
+  regData?: RegistrationData
   onNext: (data: IdentityFormData) => void
 }) {
   const guessName = (fullName?: string | null) => {
@@ -390,11 +579,12 @@ function IdentityStep({
     const parts = fullName.trim().split(/\s+/)
     return { firstName: parts[0] ?? '', lastName: parts.slice(1).join(' ') }
   }
-  const { firstName, lastName } = guessName(session?.user?.name)
+  const defaultFirstName = regData?.firstName || guessName(session?.user?.name).firstName
+  const defaultLastName = regData?.lastName || guessName(session?.user?.name).lastName
 
   const form = useForm<IdentityFormData>({
     resolver: zodResolver(identitySchema),
-    defaultValues: { firstName, lastName: lastName || '' },
+    defaultValues: { firstName: defaultFirstName, lastName: defaultLastName || '' },
   })
 
   return (
@@ -1442,36 +1632,91 @@ function SocialMediaStep({
   )
 }
 
-// ─── Thank You Step ───────────────────────────────────────────────────────────
-
 function ThankYouStep({ onClose }: { onClose: () => void }) {
   return (
-    <div className="space-y-6 text-center py-4">
-      <div className="flex justify-center">
-        <div className="w-16 h-16 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
-          <CheckCircle2 className="w-8 h-8 text-primary" />
-        </div>
+    <div className="flex flex-col items-center justify-center text-center py-8 space-y-8 select-none">
+      {/* Confetti / Particle / Glowing Checkmark Container */}
+      <div className="relative">
+        {/* Expansive glowing pulse behind checkmark */}
+        <motion.div
+          className="absolute inset-0 rounded-full bg-primary/20 dark:bg-primary/30 blur-xl"
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ 
+            scale: [1, 1.4, 1.2], 
+            opacity: [0.3, 0.6, 0.3] 
+          }}
+          transition={{ 
+            duration: 2, 
+            repeat: Infinity, 
+            repeatType: "reverse", 
+            ease: "easeInOut" 
+          }}
+        />
+        
+        {/* Outer ripple rings */}
+        <motion.div 
+          className="absolute -inset-4 rounded-full border border-primary/20"
+          initial={{ scale: 0.7, opacity: 0 }}
+          animate={{ scale: 1.25, opacity: 0 }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeOut" }}
+        />
+        <motion.div 
+          className="absolute -inset-8 rounded-full border border-primary/10"
+          initial={{ scale: 0.7, opacity: 0 }}
+          animate={{ scale: 1.35, opacity: 0 }}
+          transition={{ duration: 1.6, delay: 0.5, repeat: Infinity, ease: "easeOut" }}
+        />
+
+        {/* Primary check circle */}
+        <motion.div 
+          className="relative w-20 h-20 rounded-full bg-gradient-to-tr from-primary to-blue-600 flex items-center justify-center shadow-lg shadow-primary/20"
+          initial={{ scale: 0, rotate: -45 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ 
+            type: "spring", 
+            stiffness: 260, 
+            damping: 20, 
+            delay: 0.1 
+          }}
+        >
+          <CheckCircle2 className="w-10 h-10 text-white stroke-[2.5]" />
+        </motion.div>
       </div>
 
-      <div className="space-y-2">
-        <h2 className="text-2xl font-semibold text-foreground">
+      {/* Title & Description with staggered fade-in */}
+      <div className="space-y-3 max-w-sm">
+        <motion.h2 
+          className="text-3xl font-extrabold tracking-tight text-foreground"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.4 }}
+        >
           You&apos;re registered! 🎉
-        </h2>
-        <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-          Thank you for registering for the workshop. We&apos;ll be in touch
-          soon with more details.
-        </p>
+        </motion.h2>
+        <motion.p 
+          className="text-sm text-muted-foreground leading-relaxed"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+        >
+          Welcome to Eventos! Your academic journey and workshop profile have been successfully set up. We&apos;ll be in touch soon with more details.
+        </motion.p>
       </div>
 
-      <button
-        type="button"
-        onClick={onClose}
-        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-        aria-label="Close and return to home"
+      {/* Go to Dashboard button */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.4 }}
+        className="w-full pt-2"
       >
-        <X className="w-4 h-4" />
-        Close
-      </button>
+        <Button
+          onClick={onClose}
+          className="w-full h-12 rounded-xl bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-white font-semibold transition-all duration-300 shadow-md hover:shadow-lg shadow-primary/10 hover:shadow-primary/20 flex items-center justify-center gap-2"
+        >
+          Go to Dashboard <ChevronRight className="w-4 h-4" />
+        </Button>
+      </motion.div>
     </div>
   )
 }
@@ -1481,6 +1726,8 @@ function ThankYouStep({ onClose }: { onClose: () => void }) {
 type RegistrationData = {
   firstName?: string
   lastName?: string
+  email?: string
+  password?: string
   role?: Role
   roleData?: StudentFormData | EducatorFormData | ProfessionalFormData
   socialMedia?: SocialMediaFormData
@@ -1507,6 +1754,22 @@ export function RegistrationWizard() {
 
   function goToHome() {
     router.push('/')
+  }
+
+  function handleEmailSignUp(
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+  ) {
+    setRegData((prev) => ({
+      ...prev,
+      firstName,
+      lastName,
+      email,
+      password,
+    }))
+    setStep(STEP.IDENTITY)
   }
 
   function handleStudentFields(roleData: StudentFormData) {
@@ -1543,55 +1806,72 @@ export function RegistrationWizard() {
   }
 
   return (
-    <div className="w-full">
-      {/* Progress bar (skip on auth & done steps) */}
-      {step >= STEP.IDENTITY && step < STEP.DONE && (
-        <StepProgressBar current={progressCurrent} total={totalProgressSteps} />
-      )}
+    <div className="w-full flex flex-col min-h-[380px] justify-between">
+      <div>
+        {/* Progress bar (skip on auth & done steps) */}
+        {step >= STEP.IDENTITY && step < STEP.DONE && (
+          <StepProgressBar current={progressCurrent} total={totalProgressSteps} />
+        )}
 
-      {step === STEP.AUTH && (
-        <AuthStep onAuthenticated={() => setStep(STEP.IDENTITY)} />
-      )}
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={step}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full"
+          >
+            {step === STEP.AUTH && (
+              <AuthStep
+                onAuthenticated={() => setStep(STEP.IDENTITY)}
+                onEmailSignUp={handleEmailSignUp}
+              />
+            )}
 
-      {step === STEP.IDENTITY && (
-        <IdentityStep
-          session={session}
-          onNext={(d) => {
-            setRegData((prev) => ({ ...prev, ...d }))
-            setStep(STEP.ROLE)
-          }}
-        />
-      )}
+            {step === STEP.IDENTITY && (
+              <IdentityStep
+                session={session}
+                regData={regData}
+                onNext={(d) => {
+                  setRegData((prev) => ({ ...prev, ...d }))
+                  setStep(STEP.ROLE)
+                }}
+              />
+            )}
 
-      {step === STEP.ROLE && (
-        <RoleStep
-          onNext={(role) => {
-            setRegData((prev) => ({ ...prev, role }))
-            setStep(STEP.FIELDS)
-          }}
-        />
-      )}
+            {step === STEP.ROLE && (
+              <RoleStep
+                onNext={(role) => {
+                  setRegData((prev) => ({ ...prev, role }))
+                  setStep(STEP.FIELDS)
+                }}
+              />
+            )}
 
-      {step === STEP.FIELDS && regData.role === 'student' && (
-        <StudentStep onNext={handleStudentFields} />
-      )}
+            {step === STEP.FIELDS && regData.role === 'student' && (
+              <StudentStep onNext={handleStudentFields} />
+            )}
 
-      {step === STEP.FIELDS && regData.role === 'educator' && (
-        <EducatorStep onNext={handleEducatorOrProfessionalFields} />
-      )}
+            {step === STEP.FIELDS && regData.role === 'educator' && (
+              <EducatorStep onNext={handleEducatorOrProfessionalFields} />
+            )}
 
-      {step === STEP.FIELDS && regData.role === 'professional' && (
-        <ProfessionalStep onNext={handleEducatorOrProfessionalFields} />
-      )}
+            {step === STEP.FIELDS && regData.role === 'professional' && (
+              <ProfessionalStep onNext={handleEducatorOrProfessionalFields} />
+            )}
 
-      {step === STEP.SOCIAL && (
-        <SocialMediaStep
-          onSubmit={handleSocialSubmit}
-          onSkip={handleSocialSkip}
-        />
-      )}
+            {step === STEP.SOCIAL && (
+              <SocialMediaStep
+                onSubmit={handleSocialSubmit}
+                onSkip={handleSocialSkip}
+              />
+            )}
 
-      {step === STEP.DONE && <ThankYouStep onClose={goToHome} />}
+            {step === STEP.DONE && <ThankYouStep onClose={goToHome} />}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
   )
 }
