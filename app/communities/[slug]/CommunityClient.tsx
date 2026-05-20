@@ -43,7 +43,7 @@ export default function CommunityClient({
 }) {
   return (
     <div className="w-full flex flex-col items-center">
-      <CommunityActions slug={community.slug} initialIsJoined={initialIsJoined} />
+      <CommunityActions slug={community.slug} name={community.name} initialIsJoined={initialIsJoined} />
 
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6 flex items-center gap-3 border-b border-slate-200/60 pb-4">

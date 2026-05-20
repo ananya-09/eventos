@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { canManageCommunityBranding } from "@/lib/community/permissions";
 
 export async function GET(
   req: Request,
@@ -108,8 +109,9 @@ export async function GET(
       joinedAt: feat.joinedAt.toISOString(),
     }));
 
-    // 4. Determine if the current authenticated user is a member
+    // 4. Determine membership and branding permissions for current user
     let isMember = false;
+    let canManageBranding = false;
     const session = await getServerSession(authOptions);
     if (session?.user?.email) {
       const user = await prisma.user.findUnique({
@@ -126,6 +128,7 @@ export async function GET(
           },
         });
         isMember = !!membership;
+        canManageBranding = await canManageCommunityBranding(user.id, community.id);
       }
     }
 
@@ -153,6 +156,7 @@ export async function GET(
       success: true,
       community,
       isMember,
+      canManageBranding,
       organizers: organizersList,
       featuredMembers,
       tags,

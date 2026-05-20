@@ -3,17 +3,23 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { UserPlus, LogOut, PenSquare, ChevronDown, Check } from "lucide-react";
+import Link from "next/link";
+import { UserPlus, LogOut, PenSquare, ChevronDown, Check, Settings2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import ConfirmModal from "@/components/ui/confirm-modal";
+import ShareButton from "./ShareButton";
 
-export default function CommunityActions({ 
-  slug, 
-  initialIsJoined = false 
-}: { 
-  slug: string; 
+export default function CommunityActions({
+  slug,
+  name,
+  initialIsJoined = false,
+  canManageBranding = false,
+}: {
+  slug: string;
+  name: string;
   initialIsJoined?: boolean;
+  canManageBranding?: boolean;
 }) {
   const router = useRouter();
   const [isJoined, setIsJoined] = useState(initialIsJoined);
@@ -82,7 +88,7 @@ export default function CommunityActions({
 
   return (
     <>
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className="flex items-center gap-3 relative z-20"
@@ -111,8 +117,20 @@ export default function CommunityActions({
           )}
         </button>
         
-        {/* Create Post Action Button */}
+        <ShareButton slug={slug} name={name} />
+        
+        {canManageBranding && (
+          <Link
+            href={`/communities/${slug}/settings/branding`}
+            className="px-5 py-2 rounded-full glass-surface border border-slate-200/80 text-slate-800 font-bold text-sm shadow-sm hover:shadow-md transition-all flex items-center gap-1.5"
+          >
+            <Settings2 className="w-3.5 h-3.5 text-[#34629f]" />
+            <span>Edit Community</span>
+          </Link>
+        )}
+
         <button
+          type="button"
           className="px-5 py-2 rounded-full bg-slate-900 text-white font-bold text-sm shadow-sm hover:bg-slate-800 hover:shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
         >
           <PenSquare className="w-3.5 h-3.5" />
