@@ -73,19 +73,27 @@ export async function POST(
             },
         });
 
-        // Prevent duplicate joins
+        // Toggle membership
         if (existingMembership) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "Already joined this community",
+            // Leave community
+            await prisma.communityMember.delete({
+                where: {
+                    userId_communityId: {
+                        userId,
+                        communityId: community.id,
+                    },
                 },
-                { status: 400 }
-            );
+            });
+
+            return NextResponse.json({
+                success: true,
+                joined: false,
+                message: "Left community",
+            });
         }
 
-        // Create membership
-        const membership = await prisma.communityMember.create({
+        // Join community
+        await prisma.communityMember.create({
             data: {
                 userId,
                 communityId: community.id,
@@ -94,8 +102,8 @@ export async function POST(
 
         return NextResponse.json({
             success: true,
+            joined: true,
             message: "Joined community successfully",
-            membership,
         });
 
     } catch (error) {

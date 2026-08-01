@@ -89,3 +89,78 @@ export async function POST(req: Request) {
     );
   }
 }
+
+// GET /api/communities
+export async function GET() {
+  try {
+    const session = await getServerSession(authOptions);
+    let userId: string | null = null;
+
+    if (session?.user?.email) {
+      const user = await prisma.user.findUnique({
+        where: { email: session.user.email },
+        select: { id: true },
+      });
+      if (user) {
+        userId = user.id;
+      }
+    }
+
+    const includeQuery: any = {
+      creator: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+      },
+      _count: {
+        select: {
+          members: true,
+          posts: true,
+        },
+      },
+    };
+
+    if (userId) {
+      includeQuery.members = {
+        where: {
+          userId,
+        },
+        select: {
+          userId: true,
+        },
+      };
+    }
+
+    const communities = await prisma.community.findMany({
+      include: includeQuery,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    const communitiesWithMembership = communities.map((c: any) => {
+      const isMember = userId ? (c.members && c.members.length > 0) : false;
+      const { members, ...rest } = c;
+      return {
+        ...rest,
+        isMember,
+      };
+    });
+
+    return NextResponse.json({
+      success: true,
+      communities: communitiesWithMembership,
+    });
+  } catch (error: any) {
+    console.error("[COMMUNITIES_GET]", error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Internal Server Error",
+      },
+      { status: 500 }
+    );
+  }
+}

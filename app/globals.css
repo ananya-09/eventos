@@ -334,3 +334,38 @@
     box-shadow: var(--shadow-elegant);
   }
 }
+
+/* 
+ * ==========================================
+ * MASTER DIAGNOSTIC STYLESHEET (UNCOMMENT TO TEST)
+ * ==========================================
+ * These overrides allow you to isolate rendering bugs instantly without component code modifications.
+ */
+
+/* 
+ === TEST 3 & TEST 5: REMOVE ALL TRANSPARENCY & GRID EFFECTS GLOBAL TOGGLE ===
+ [Uncomment the block below to test solid-only rendering]
+ */
+/*
+* {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  opacity: 1 !important;
+  background-color: var(--color-background) !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+*/
+
+/* 
+ === TEST 4: REMOVE ALL SHADOWS GLOBAL TOGGLE ===
+ [Uncomment the block below to strip all drop-shadow and box-shadow layers]
+ */
+/*
+* {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+*/
