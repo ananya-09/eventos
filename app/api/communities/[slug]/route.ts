@@ -3,10 +3,10 @@ import { CommunityService } from '@/server/services/community.service'
 
 export async function GET(
   req: Request,
-  context: { params: { slug: string } }
+  context: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const slug = context.params.slug
+    const { slug } = await context.params
 
     const community =
       await CommunityService.getCommunityBySlug(slug)
