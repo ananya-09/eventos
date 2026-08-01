@@ -1,7 +1,14 @@
+const isGithubPages = process.env.GITHUB_PAGES === 'true'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: isGithubPages ? 'export' : undefined,
+  basePath: isGithubPages ? '/eventos' : undefined,
+  assetPrefix: isGithubPages ? '/eventos/' : undefined,
+  trailingSlash: isGithubPages,
   reactStrictMode: true,
   images: {
+    unoptimized: isGithubPages,
     remotePatterns: [
       {
         protocol: 'https',
@@ -17,21 +24,23 @@ const nextConfig = {
       },
     ],
   },
-  headers: async () => [
-    {
-      source: '/:path*',
-      headers: [
+  headers: isGithubPages
+    ? undefined
+    : async () => [
         {
-          key: 'Referrer-Policy',
-          value: 'strict-origin-when-cross-origin',
-        },
-        {
-          key: 'Permissions-Policy',
-          value: 'geolocation=(self)',
+          source: '/:path*',
+          headers: [
+            {
+              key: 'Referrer-Policy',
+              value: 'strict-origin-when-cross-origin',
+            },
+            {
+              key: 'Permissions-Policy',
+              value: 'geolocation=(self)',
+            },
+          ],
         },
       ],
-    },
-  ],
   experimental: {
     optimizePackageImports: [
       '@radix-ui/react-dialog',
