@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { PanelLeft } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import Footer from '@/components/footer'
 import SaaSGridBackground from '@/components/ui/saas-grid-background'
 import Navigation from '@/components/navigation'
@@ -12,6 +13,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [sidebarExpanded, setSidebarExpanded] = useState(false)
   const [sidebarOpacity, setSidebarOpacity] = useState(1)
   const footerRef = useRef<HTMLDivElement>(null)
+  const pathname = usePathname()
+
+  const isAuthPage = ['/login', '/register', '/forgot-password', '/error'].some(
+    (path) => pathname === path || pathname?.startsWith(path + '/')
+  )
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -33,6 +39,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
     return () => observer.disconnect()
   }, [])
+
+  if (isAuthPage) {
+    return <>{children}</>
+  }
 
   return (
     <div className="flex flex-col min-h-screen overflow-x-hidden">

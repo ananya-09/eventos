@@ -1,15 +1,54 @@
-import { PostRepository } from '@/server/repositories/post.repository'
-import { CommunityRepository } from '@/server/repositories/community.repository'
-import type { CreatePostInput } from '@/server/validators/post.validator'
+import { prisma } from "@/lib/prisma";
+
+import { CreatePostInput } from "../validators/post.validator";
 
 export class PostService {
-  static async createPost(userId: string, data: CreatePostInput) {
-    const isMember = await CommunityRepository.isMember(userId, data.communityId)
+  static async createPost(
+    userId: string,
+    data: CreatePostInput
+  ) {
+    // 1. Find community
+    const community = await prisma.community.findUnique({
+      where: {
+        slug: data.communitySlug,
+      },
+    });
 
-    if (!isMember) {
-      throw new Error('You must be a member of the community to post')
+    if (!community) {
+      throw new Error("Community not found");
     }
 
-    return PostRepository.create(userId, data)
+    // 2. Check membership
+    const membership = await prisma.communityMember.findUnique({
+      where: {
+        userId_communityId: {
+          userId,
+          communityId: community.id,
+        },
+      },
+    });
+
+    if (!membership) {
+      throw new Error(
+        "You must join the community before posting"
+      );
+    }
+
+    // 3. Create post
+    const post = await prisma.post.create({
+      data: {
+        title: data.title,
+        content: data.content,
+        authorId: userId,
+        communityId: community.id,
+      },
+
+      include: {
+        author: true,
+        community: true,
+      },
+    });
+
+    return post;
   }
 }

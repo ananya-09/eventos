@@ -9,37 +9,41 @@ interface LoaderWrapperProps {
 
 export default function LoaderWrapper({ children }: LoaderWrapperProps) {
   const [showContent, setShowContent] = useState(false);
+  const [needsLoader, setNeedsLoader] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Check if loader has completed by checking localStorage or sessionStorage
-    const checkLoaderComplete = () => {
-      const isLoaderDone = sessionStorage.getItem('loaderComplete');
-      if (isLoaderDone) {
-        setShowContent(true);
-      }
-    };
-
-    // Set up observer for loader completion
-    const handleLoaderComplete = () => {
-      sessionStorage.setItem('loaderComplete', 'true');
+    const isLoaderDone = sessionStorage.getItem('loaderComplete');
+    if (isLoaderDone) {
+      setNeedsLoader(false);
       setShowContent(true);
-    };
-
-    // Listen for custom event from loader
-    window.addEventListener('loaderComplete', handleLoaderComplete);
-
-    // Check on mount
-    checkLoaderComplete();
-
-    return () => {
-      window.removeEventListener('loaderComplete', handleLoaderComplete);
-    };
+    } else {
+      setNeedsLoader(true);
+    }
+    setIsMounted(true);
   }, []);
 
   return (
     <>
-      <PremiumLoader onComplete={() => setShowContent(true)} />
-      <div className={`transition-opacity duration-500 ${showContent ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      {/* Solid black cover screen to completely hide hydration layout shifts */}
+      {!isMounted && (
+        <div className="fixed inset-0 bg-black z-[99999]" />
+      )}
+      
+      {needsLoader && (
+        <PremiumLoader
+          onComplete={() => {
+            setNeedsLoader(false);
+            setShowContent(true);
+          }}
+        />
+      )}
+      
+      <div
+        className={`transition-opacity duration-500 ${
+          showContent || !isMounted ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+      >
         {children}
       </div>
     </>

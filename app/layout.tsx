@@ -3,6 +3,8 @@ import { Manrope } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import AuthSessionProvider from '@/components/session-provider'
 import { Toaster } from '@/components/ui/sonner'
+import AppShell from '@/components/app-shell'
+import LoaderWrapper from '@/components/ui/loader-wrapper'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -77,7 +79,11 @@ export default function RootLayout({
       <body className={`${fontSans.className} font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider>
           <AuthSessionProvider>
-            {children}
+            <LoaderWrapper>
+              <AppShell>
+                {children}
+              </AppShell>
+            </LoaderWrapper>
             <Toaster richColors />
           </AuthSessionProvider>
         </ThemeProvider>

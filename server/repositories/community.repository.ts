@@ -1,4 +1,4 @@
-import prisma from '@/server/db/prisma'
+import { prisma } from '@/lib/prisma'
 import { CommunityRole } from '@prisma/client'
 import type { CreateCommunityInput } from '@/server/validators/community.validator'
 

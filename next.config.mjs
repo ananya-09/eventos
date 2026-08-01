@@ -7,6 +7,7 @@ const nextConfig = {
   assetPrefix: isGithubPages ? '/eventos/' : undefined,
   trailingSlash: isGithubPages,
   reactStrictMode: true,
+
   images: {
     unoptimized: isGithubPages,
     remotePatterns: [
@@ -20,13 +21,23 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**.unsplash.com',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
       },
     ],
   },
-  headers: isGithubPages
-    ? undefined
-    : async () => [
+
+  headers: async () => [
+    {
+      source: '/:path*',
+      headers: [
+        {
+          key: 'Referrer-Policy',
+          value: 'strict-origin-when-cross-origin',
+        },
         {
           source: '/:path*',
           headers: [
@@ -41,6 +52,9 @@ const nextConfig = {
           ],
         },
       ],
+    },
+  ],
+
   experimental: {
     optimizePackageImports: [
       '@radix-ui/react-dialog',

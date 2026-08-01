@@ -1,14 +1,23 @@
-import prisma from '@/server/db/prisma'
+import { prisma } from '@/lib/prisma'
 import type { CreatePostInput } from '@/server/validators/post.validator'
 
 export class PostRepository {
-  static async create(authorId: string, data: CreatePostInput) {
+  static async create(authorId: string, { communitySlug, ...rest }: CreatePostInput) {
+    const community = await prisma.community.findUnique({
+      where: { slug: communitySlug },
+    });
+
+    if (!community) {
+      throw new Error("Community not found");
+    }
+
     return prisma.post.create({
       data: {
-        ...data,
+        ...rest,
         authorId,
+        communityId: community.id,
       },
-    })
+    });
   }
 
   static async findById(id: string) {
