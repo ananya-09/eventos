@@ -39,17 +39,8 @@ const nextConfig = {
           value: 'strict-origin-when-cross-origin',
         },
         {
-          source: '/:path*',
-          headers: [
-            {
-              key: 'Referrer-Policy',
-              value: 'strict-origin-when-cross-origin',
-            },
-            {
-              key: 'Permissions-Policy',
-              value: 'geolocation=(self)',
-            },
-          ],
+          key: 'Permissions-Policy',
+          value: 'geolocation=(self)',
         },
       ],
     },
